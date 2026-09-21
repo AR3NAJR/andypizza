@@ -1,0 +1,1439 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Andy Pizza | Pizzeria da asporto e domicilio a Lurago d'Erba</title>
+  <meta name="description" content="Andy Pizza, pizzeria a Lurago d'Erba (Via Roma 82): pizza cotta nel forno a legna, da asporto e a domicilio. Sfoglia il menu completo e chiama lo 031.4682794 per ordinare.">
+  <meta name="theme-color" content="#0b0b0b">
+  <meta name="color-scheme" content="dark">
+
+  <!-- Open Graph base. og:url e og:image vanno aggiunti a sito pubblicato (nessun URL inventato). -->
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="it_IT">
+  <meta property="og:site_name" content="Andy Pizza">
+  <meta property="og:title" content="Andy Pizza | Forno a legna, asporto e domicilio a Lurago d'Erba">
+  <meta property="og:description" content="Il menu completo di Andy Pizza, Via Roma 82, Lurago d'Erba. Scegli la tua pizza e chiama lo 031.4682794.">
+
+  <!-- Favicon: data URI, sostituibile con un file reale -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%230b0b0b'/%3E%3Cpath d='M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.07-2.14-.22-4.05 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.15.43-2.29 1-3a2.5 2.5 0 0 0 2.5 2.5z' fill='none' stroke='%23ff6b35' stroke-width='1.8' stroke-linejoin='round' transform='translate(3 3) scale(.75)'/%3E%3C/svg%3E">
+
+  <!-- Font: Big Shoulders Display (titoli, prezzi) + Instrument Sans (testo) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Instrument+Sans:wght@400;500;600;700&display=swap">
+
+  <!-- AOS (scroll reveal) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+
+  <!-- Tailwind CSS via CDN + palette del progetto -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            coal: '#0b0b0b',
+            ink: '#111111',
+            ardesia: { DEFAULT: '#171717', hi: '#1f1e1c' },
+            legno: { DEFAULT: '#1a110b', hi: '#2a1b10' },
+            crema: '#f2e8d5',
+            latte: '#faf6ee',
+            fumo: '#a39c90',
+            brace: { DEFAULT: '#ff6b35', hi: '#ff8a5c', lo: '#e0491a' }
+          },
+          fontFamily: {
+            display: ['"Big Shoulders Display"', '"Arial Narrow"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+            sans: ['"Instrument Sans"', 'ui-sans-serif', 'system-ui', '-apple-system', '"Segoe UI"', 'Roboto', 'sans-serif']
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    /* ==========================================================================
+       ANDY PIZZA — token e componenti
+       Layout con utility Tailwind; componenti ricorrenti qui sotto.
+       I colori in :root devono restare allineati a tailwind.config sopra.
+       ========================================================================== */
+    :root {
+      --coal: #0b0b0b; --ink: #111111; --slate: #171717; --slate-hi: #1f1e1c;
+      --wood: #1a110b; --wood-hi: #2a1b10;
+      --line: rgba(255,255,255,.09); --line-hi: rgba(255,255,255,.18);
+      --cream: #f2e8d5; --latte: #faf6ee; --smoke: #a39c90;
+      --ember: #ff6b35; --ember-hi: #ff8a5c; --ember-lo: #e0491a;
+      --ok: #6ee7a0; --off: #f28b82;
+      --hdr: 56px;            /* altezza header */
+      --bar: 66px;            /* altezza barra CTA mobile */
+      --sticky-top: var(--hdr);
+      --ease: cubic-bezier(.22, .61, .36, 1);
+      --f-display: 'Big Shoulders Display', 'Arial Narrow', ui-sans-serif, system-ui, sans-serif;
+      --f-body: 'Instrument Sans', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    }
+    @media (min-width: 768px) { :root { --hdr: 68px; } }
+
+    html { background: var(--coal); -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+    body { margin: 0; font-family: var(--f-body); color: var(--cream); line-height: 1.55; overflow-x: clip;
+           -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; -webkit-tap-highlight-color: transparent; }
+    [id] { scroll-margin-top: 4.5rem; }
+    [hidden] { display: none !important; }
+    ::selection { background: var(--ember); color: #1a0b04; }
+    :focus-visible { outline: 2px solid var(--ember); outline-offset: 3px; border-radius: .4rem; }
+
+    /* Grana leggerissima ardesia/carbone, senza immagini */
+    body::before {
+      content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+      background-image:
+        radial-gradient(rgba(255,255,255,.055) 1px, transparent 1.4px),
+        radial-gradient(rgba(255,255,255,.03) 1px, transparent 1.4px),
+        radial-gradient(120% 60% at 50% 0%, rgba(255,107,53,.05), transparent 60%);
+      background-size: 5px 5px, 9px 9px, 100% 100%;
+      background-position: 0 0, 3px 4px, 0 0;
+    }
+
+    .skip { position: fixed; left: .75rem; top: .75rem; z-index: 100; transform: translateY(-220%);
+            background: var(--ember); color: #1a0b04; padding: .75rem 1rem; border-radius: .75rem; font-weight: 700; }
+    .skip:focus { transform: none; }
+
+    /* Utility responsive robuste (non dipendono dall'ordine dei CSS) */
+    .md-only, .md-only-block, .lg-only { display: none !important; }
+    @media (min-width: 768px) { .md-only { display: inline-flex !important; } .md-only-block { display: block !important; } .md-hide { display: none !important; } }
+    @media (min-width: 1024px) { .lg-only { display: inline-flex !important; } }
+
+    .ic { width: 1.25rem; height: 1.25rem; flex: none; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .wrap { width: 100%; max-width: 74rem; margin-inline: auto; padding-inline: 1.25rem; }
+    @media (min-width: 768px) { .wrap { padding-inline: 2rem; } }
+
+    /* ---------- Tipografia ---------- */
+    .h-sec { font-family: var(--f-display); font-weight: 800; text-transform: uppercase; color: var(--latte);
+             font-size: clamp(2.6rem, 12vw, 5.25rem); line-height: .86; letter-spacing: -.005em; text-wrap: balance; }
+    .h-sub { font-family: var(--f-display); font-weight: 800; text-transform: uppercase; font-size: 1.75rem; line-height: 1; color: var(--latte); }
+    .lead { color: var(--smoke); font-size: 1.0625rem; line-height: 1.6; max-width: 38rem; }
+    .label { font-size: .72rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--smoke); }
+
+    /* ---------- Bottoni ---------- */
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: .6rem; min-height: 52px; padding: 0 1.4rem;
+           border-radius: 999px; font-weight: 700; font-size: 1rem; line-height: 1; white-space: nowrap; cursor: pointer;
+           transition: transform .18s var(--ease), box-shadow .25s var(--ease), background-color .2s, border-color .2s; }
+    .btn:active { transform: scale(.97); }
+    .btn-lg { min-height: 60px; padding: 0 1.75rem; font-size: 1.05rem; }
+    .btn-sm { min-height: 44px; padding: 0 1.15rem; font-size: .95rem; }
+    .btn-primary { background: var(--ember); color: #1a0b04; box-shadow: 0 12px 30px -14px rgba(255,107,53,.75), inset 0 1px 0 rgba(255,255,255,.3); }
+    .btn-ghost { color: var(--latte); border: 1px solid var(--line-hi); background: rgba(255,255,255,.04); }
+    @media (hover: hover) {
+      .btn-primary:hover { background: var(--ember-hi); transform: translateY(-1px); box-shadow: 0 18px 36px -14px rgba(255,107,53,.85), inset 0 1px 0 rgba(255,255,255,.3); }
+      .btn-ghost:hover { border-color: rgba(255,255,255,.4); background: rgba(255,255,255,.09); }
+    }
+
+    /* ---------- Badge e stato apertura ---------- */
+    .badge { display: inline-flex; align-items: center; gap: .5rem; padding: .42rem .9rem; border-radius: 999px;
+             background: var(--ember); color: #1a0b04; font-weight: 700; font-size: .72rem; letter-spacing: .16em; text-transform: uppercase; }
+    .badge .ic { width: 1rem; height: 1rem; }
+    .badge-line { background: rgba(0,0,0,.35); color: var(--latte); border: 1px solid var(--line-hi); backdrop-filter: blur(6px); }
+    .status { display: inline-flex; align-items: center; gap: .5rem; padding: .42rem .85rem; border-radius: 999px; font-size: .74rem; font-weight: 700;
+              letter-spacing: .14em; text-transform: uppercase; color: var(--latte); border: 1px solid var(--line-hi); background: rgba(0,0,0,.4); }
+    .status .dot { width: .55rem; height: .55rem; border-radius: 50%; background: var(--smoke); }
+    .status.is-open .dot { background: var(--ok); animation: pulse 2.4s ease-out infinite; }
+    .status.is-closed .dot { background: var(--off); }
+    @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(110,231,160,.55); } 70%, 100% { box-shadow: 0 0 0 9px rgba(110,231,160,0); } }
+
+    /* ---------- Immagini con fallback ---------- */
+    .media { position: relative; overflow: hidden; isolation: isolate;
+             background:
+               radial-gradient(90% 70% at 70% 15%, rgba(255,107,53,.24), transparent 60%),
+               repeating-radial-gradient(circle at 50% 58%, rgba(255,255,255,.045) 0 1px, transparent 1px 26px),
+               linear-gradient(160deg, #2a1a10, #0f0f0f 70%); }
+    .media > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0;
+                   transition: opacity .7s var(--ease), transform 1.2s var(--ease); filter: saturate(.92) contrast(1.06) brightness(.8); }
+    .media > img.is-loaded { opacity: 1; }
+    .media > img.is-broken { display: none; }
+    @media (hover: hover) { .media.zoom:hover > img { transform: scale(1.04); } }
+    .veil { position: absolute; inset: 0; pointer-events: none; }
+
+    /* ---------- Header ---------- */
+    .site-header { position: fixed; inset: 0 0 auto 0; z-index: 50; height: var(--hdr); border-bottom: 1px solid transparent;
+                   transition: transform .32s var(--ease), background-color .3s, border-color .3s; }
+    .site-header.is-solid, .site-header.menu-open { background: rgba(11,11,11,.86); border-bottom-color: var(--line); backdrop-filter: blur(14px) saturate(1.2); -webkit-backdrop-filter: blur(14px) saturate(1.2); }
+    .site-header.is-hidden { transform: translateY(-100%); }
+    .logo { display: inline-flex; align-items: center; gap: .6rem; min-height: 44px; }
+    .logo-mark { display: grid; place-items: center; width: 2.25rem; height: 2.25rem; border-radius: .7rem 1rem .7rem .7rem; background: var(--ember); color: #1a0b04; }
+    .logo-mark .ic { width: 1.15rem; height: 1.15rem; stroke-width: 2.2; }
+    .logo-text { font-family: var(--f-display); font-weight: 900; font-size: 1.65rem; line-height: 1; text-transform: uppercase; letter-spacing: .01em; color: var(--latte); }
+    .nb { white-space: nowrap; }
+    .hs-v { display: flex; flex-wrap: wrap; column-gap: .9rem; }
+    .lg-nav { display: none; }
+    @media (min-width: 1024px) { .lg-nav { display: block; } .lg-hide { display: none !important; } }
+    .logo-text { white-space: nowrap; }
+    @media (max-width: 1023px) { .nav-link { padding: 0 .55rem; font-size: .9rem; } }
+    .nav-link { display: inline-flex; align-items: center; min-height: 44px; padding: 0 .85rem; border-radius: 999px; font-weight: 600; font-size: .95rem; color: var(--cream); opacity: .82; transition: opacity .2s, background-color .2s; }
+    @media (hover: hover) { .nav-link:hover { opacity: 1; background: rgba(255,255,255,.07); } }
+
+    .burger { display: grid; place-content: center; gap: 6px; width: 44px; height: 44px; border-radius: 999px; border: 1px solid var(--line-hi); background: rgba(11,11,11,.45); }
+    .burger span { display: block; width: 20px; height: 2px; border-radius: 2px; background: var(--cream); transition: transform .3s var(--ease), opacity .2s; }
+    .burger[aria-expanded="true"] span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+    .burger[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+    .burger[aria-expanded="true"] span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+    .mnav-backdrop { position: fixed; inset: 0; z-index: 46; background: rgba(0,0,0,.6); opacity: 0; visibility: hidden; transition: opacity .25s, visibility 0s linear .25s; }
+    .mnav { position: fixed; left: 0; right: 0; top: var(--hdr); z-index: 49; padding: .5rem 1.25rem 1.25rem; background: rgba(17,17,17,.98);
+            border-bottom: 1px solid var(--line-hi); opacity: 0; visibility: hidden; transform: translateY(-10px);
+            transition: opacity .25s, transform .3s var(--ease), visibility 0s linear .3s; }
+    .mnav.is-open, .mnav-backdrop.is-open { opacity: 1; visibility: visible; transform: none; transition-delay: 0s; }
+    .mnav a.mnav-link { display: flex; align-items: center; min-height: 56px; border-bottom: 1px solid var(--line);
+                        font-family: var(--f-display); font-weight: 800; font-size: 1.9rem; text-transform: uppercase; color: var(--latte); }
+
+    /* ---------- Hero ---------- */
+    .hero { position: relative; isolation: isolate; display: flex; align-items: flex-end; min-height: 100vh; min-height: 100svh; overflow: hidden; }
+    .hero-media { position: absolute; inset: 0; z-index: -3; }
+    .hero-media > img { transform: scale(1.12); transition: opacity .8s var(--ease); will-change: transform; }
+    .hero-veil { z-index: -2; background:
+        linear-gradient(180deg, rgba(11,11,11,.62) 0%, rgba(11,11,11,.18) 30%, rgba(11,11,11,.72) 68%, #0b0b0b 100%),
+        radial-gradient(110% 80% at 50% 35%, transparent 35%, rgba(0,0,0,.55) 100%),
+        rgba(0,0,0,.28); }
+    .hero-glow { position: absolute; z-index: -1; left: 50%; bottom: -40%; width: 150%; aspect-ratio: 1; transform: translateX(-50%); pointer-events: none;
+                 background: radial-gradient(closest-side, rgba(255,107,53,.32), rgba(255,107,53,.08) 55%, transparent 72%); animation: breathe 6s ease-in-out infinite; }
+    @keyframes breathe { 50% { opacity: .65; transform: translateX(-50%) scale(1.05); } }
+    .hero-grid { display: grid; gap: 1.5rem; grid-template-areas: "title" "status" "cta"; }
+    .hg-title { grid-area: title; } .hg-status { grid-area: status; } .hg-cta { grid-area: cta; }
+    @media (min-width: 1024px) {
+      .hero-grid { grid-template-columns: minmax(0, 1fr) 23rem; grid-template-areas: "title status" "cta status"; align-items: end; column-gap: 4rem; row-gap: 2rem; }
+    }
+    .hero-title { font-family: var(--f-display); font-weight: 900; text-transform: uppercase; color: var(--latte);
+                  font-size: clamp(4rem, 21vw, 12rem); line-height: .84; letter-spacing: -.01em; margin-top: 1rem; }
+    .hero-tag { font-family: var(--f-display); font-weight: 700; text-transform: uppercase; color: var(--cream);
+                font-size: clamp(1.5rem, 6.4vw, 2.4rem); line-height: 1.02; letter-spacing: .01em; max-width: 21ch; text-wrap: balance; margin-top: 1.1rem; }
+    .hero-p { color: var(--cream); opacity: .85; margin-top: .75rem; max-width: 30rem; }
+    @media (max-height: 640px) { .hero-p { display: none; } }
+    .hero-status { padding: 1rem 1.1rem; border-radius: 1.4rem 1.4rem 1.4rem .4rem; background: rgba(17,17,17,.72); border: 1px solid var(--line-hi); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+    .hs-top { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem .75rem; }
+    .hs-detail { font-weight: 600; font-size: .95rem; color: var(--latte); }
+    .hs-hours { display: flex; align-items: baseline; gap: .75rem; margin-top: .8rem; padding-top: .8rem; border-top: 1px solid var(--line); }
+    .hs-k { font-size: .72rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--smoke); }
+    .hs-v { font-family: var(--f-display); font-weight: 800; font-size: 1.5rem; line-height: 1.1; color: var(--latte); }
+    .hs-note { margin-top: .35rem; font-size: .85rem; color: var(--smoke); }
+    .rise { opacity: 0; transform: translateY(16px); animation: rise .8s var(--ease) forwards; animation-delay: calc(var(--i, 0) * 90ms + 120ms); }
+    @keyframes rise { to { opacity: 1; transform: none; } }
+
+    /* ---------- Quick info ---------- */
+    .quick { background: var(--ink); border-block: 1px solid var(--line); }
+    .chip { display: flex; align-items: center; gap: .7rem; min-height: 56px; padding: 0 1.1rem; border: 1px solid var(--line-hi); border-radius: 999px;
+            font-weight: 700; font-size: .78rem; letter-spacing: .12em; text-transform: uppercase; color: var(--latte); background: rgba(255,255,255,.03); }
+    .chip .ic { color: var(--ember); }
+
+    /* ---------- Concept ---------- */
+    .frame { border-radius: 2rem 2rem 2rem .5rem; }
+    .collage { position: relative; padding: 0 2.75rem 3rem 0; }
+    .collage-small { position: absolute; right: 0; bottom: 0; width: 46%; border: 6px solid var(--coal); border-radius: 1.5rem .4rem 1.5rem 1.5rem; }
+    .facts > div { display: grid; grid-template-columns: 6.5rem 1fr; gap: 1rem; padding: 1rem 0; border-top: 1px solid var(--line-hi); }
+    .facts > div:last-child { border-bottom: 1px solid var(--line-hi); }
+    .facts dt { font-size: .72rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--smoke); padding-top: .2rem; }
+    .facts dd { font-weight: 600; color: var(--latte); }
+
+    /* ---------- Servizi (venatura del legno) ---------- */
+    .wood { background:
+              repeating-linear-gradient(90deg, rgba(255,255,255,.014) 0 1px, transparent 1px 9px),
+              linear-gradient(180deg, var(--coal) 0%, var(--wood) 26%, var(--wood) 74%, var(--coal) 100%); }
+    .svc { display: flex; gap: 1rem; align-items: flex-start; padding: 1.25rem; border-radius: 1.5rem; background: rgba(255,255,255,.035); border: 1px solid var(--line); transition: background-color .25s, border-color .25s; }
+    @media (min-width: 768px) { .svc { flex-direction: column; gap: 1.75rem; padding: 1.75rem; min-height: 15rem; } }
+    .svc-ic { flex: none; display: grid; place-items: center; width: 3.4rem; height: 3.4rem; border-radius: 1rem; color: var(--ember);
+              background: rgba(255,107,53,.12); border: 1px solid rgba(255,107,53,.3); transition: background-color .25s, color .25s, box-shadow .25s; }
+    .svc-ic .ic { width: 1.6rem; height: 1.6rem; }
+    .svc p { color: var(--smoke); margin-top: .35rem; }
+    @media (hover: hover) {
+      .svc:hover { background: rgba(255,255,255,.06); border-color: var(--line-hi); }
+      .svc:hover .svc-ic { background: var(--ember); color: #1a0b04; box-shadow: 0 0 34px -6px rgba(255,107,53,.75); }
+    }
+
+    /* ---------- Menu: ricerca, personalizzazione, navigazione ---------- */
+    .search { position: relative; display: flex; align-items: center; }
+    .search > .ic { position: absolute; left: 1.1rem; color: var(--smoke); pointer-events: none; }
+    .search input { width: 100%; min-height: 56px; padding: 0 3.25rem 0 3.1rem; border-radius: 999px; border: 1px solid var(--line-hi); background: var(--slate);
+                    color: var(--latte); font: inherit; font-size: 1rem; -webkit-appearance: none; appearance: none; }
+    .search input::placeholder { color: var(--smoke); }
+    .search input::-webkit-search-cancel-button { display: none; }
+    .search input:focus-visible { outline: 2px solid var(--ember); outline-offset: 2px; }
+    .search .clear { position: absolute; right: .35rem; display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; color: var(--cream); }
+    .cust { position: relative; margin-top: 2rem; padding: 1.4rem 1.25rem 1.25rem 1.5rem; border-radius: 1.5rem; background: linear-gradient(135deg, var(--wood-hi), var(--wood)); border: 1px solid rgba(255,107,53,.22); }
+    .cust::before { content: ""; position: absolute; left: 0; top: 1.4rem; bottom: 1.4rem; width: 3px; border-radius: 0 3px 3px 0; background: var(--ember); }
+    .format-list { display: grid; grid-template-columns: repeat(3, 1fr); gap: .5rem; }
+    .format-list li { display: grid; place-items: center; min-height: 48px; padding: 0 .25rem; border-radius: .8rem; border: 1px solid var(--line-hi); background: rgba(0,0,0,.28);
+                      font-weight: 700; font-size: .8rem; letter-spacing: .08em; text-transform: uppercase; color: var(--latte); }
+    .extras li { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; padding: .85rem 0; border-bottom: 1px solid var(--line); }
+    .extras li:last-child { border-bottom: 0; padding-bottom: 0; }
+    .extras span { font-weight: 600; color: var(--latte); }
+    .extras data { font-family: var(--f-display); font-weight: 800; font-size: 1.6rem; line-height: 1; color: var(--ember); white-space: nowrap; }
+
+    .menu-nav { position: sticky; top: var(--sticky-top); z-index: 30; background: rgba(11,11,11,.92); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+                border-block: 1px solid var(--line); transition: top .32s var(--ease); }
+    .menu-nav-scroller { position: relative; display: flex; gap: .5rem; overflow-x: auto; padding: .5rem 1.25rem; scroll-snap-type: x proximity; scrollbar-width: none; -ms-overflow-style: none; -webkit-overflow-scrolling: touch;
+                         -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 1rem, #000 calc(100% - 1.5rem), transparent 100%);
+                         mask-image: linear-gradient(90deg, transparent 0, #000 1rem, #000 calc(100% - 1.5rem), transparent 100%); }
+    .menu-nav-scroller::-webkit-scrollbar { display: none; }
+    @media (min-width: 1100px) { .menu-nav-scroller { justify-content: center; } }
+    .menu-pill { flex: none; scroll-snap-align: center; display: inline-flex; align-items: center; gap: .45rem; min-height: 44px; padding: 0 1rem; border-radius: 999px;
+                 border: 1px solid var(--line-hi); background: rgba(255,255,255,.03); color: var(--cream); font-weight: 600; font-size: .92rem; white-space: nowrap;
+                 transition: background-color .2s, color .2s, border-color .2s, transform .15s; }
+    .menu-pill small { font-size: .7rem; font-weight: 700; opacity: .55; font-variant-numeric: tabular-nums; }
+    .menu-pill:active { transform: scale(.96); }
+    .menu-pill.is-active { background: var(--ember); border-color: var(--ember); color: #1a0b04; }
+    .menu-pill.is-active small { opacity: .75; }
+    @media (hover: hover) { .menu-pill:not(.is-active):hover { background: rgba(255,255,255,.09); border-color: rgba(255,255,255,.35); } }
+
+    /* ---------- Menu: categorie e voci ---------- */
+    .menu-cat { scroll-margin-top: 4.5rem; }
+    .cat-card { padding: 1.25rem 1.1rem .4rem; border-radius: 1.75rem; border: 1px solid var(--line);
+                background: linear-gradient(180deg, rgba(255,255,255,.045), rgba(255,255,255,.01)), var(--slate); box-shadow: inset 0 1px 0 rgba(255,255,255,.05); }
+    @media (min-width: 768px) { .cat-card { padding: 2rem 2.25rem .75rem; border-radius: 2rem; } }
+    .cat-head { display: flex; align-items: flex-end; gap: 1rem; padding-bottom: 1.1rem; border-bottom: 1px solid var(--line-hi); }
+    .cat-num { font-family: var(--f-display); font-weight: 900; font-size: 4rem; line-height: .72; color: rgba(255,107,53,.9); }
+    @supports (-webkit-text-stroke: 1px #000) { .cat-num { color: transparent; -webkit-text-stroke: 1.5px var(--ember); } }
+    .cat-title { font-family: var(--f-display); font-weight: 800; text-transform: uppercase; color: var(--latte); font-size: clamp(1.9rem, 8vw, 2.9rem); line-height: .9; letter-spacing: -.005em; }
+    .cat-meta { margin-top: .5rem; font-size: .9rem; color: var(--smoke); }
+    .cat-meta b { color: var(--cream); font-weight: 700; }
+    @media (min-width: 1024px) { .menu-list.cols { columns: 2; column-gap: 3.5rem; } }
+    .menu-item { break-inside: avoid; display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "name price" "desc desc";
+                 column-gap: 1rem; align-items: baseline; padding: .95rem 0; border-bottom: 1px solid var(--line); }
+    .menu-list > .menu-item:last-child { border-bottom: 0; }
+    .mi-name { grid-area: name; font-weight: 600; font-size: 1.0625rem; line-height: 1.28; color: var(--latte); }
+    .mi-desc { grid-area: desc; margin-top: .25rem; font-size: .92rem; line-height: 1.42; color: var(--smoke); }
+    .mi-price { grid-area: price; font-family: var(--f-display); font-weight: 800; font-size: 1.6rem; line-height: 1; color: var(--ember); white-space: nowrap; font-variant-numeric: tabular-nums; }
+    .mi-price .cur { font-size: .7em; margin-right: .06em; opacity: .85; }
+    .mi-leader { display: none; }
+    @media (min-width: 1024px) {
+      .menu-item { grid-template-columns: auto minmax(1rem, 1fr) auto; grid-template-areas: "name leader price" "desc desc desc"; }
+      .mi-leader { display: block; grid-area: leader; align-self: end; margin: 0 .7rem .38em; border-bottom: 2px dotted rgba(255,255,255,.16); height: 0; }
+    }
+    @media (hover: hover) { .menu-item { transition: background-color .2s; } .menu-item:hover { background: rgba(255,255,255,.028); } }
+    .bev-grid { display: grid; gap: 0 3.5rem; }
+    @media (min-width: 1024px) { .bev-grid { grid-template-columns: 1fr 1fr; } .bev-grid > .bev-group:first-child { grid-row: span 2; } }
+    .bev-title { padding-top: 1.1rem; font-size: .72rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--ember); }
+    .bev-group:first-child .bev-title { padding-top: 1.25rem; }
+
+    /* ---------- In evidenza ---------- */
+    .sig { display: grid; overflow: hidden; border-radius: 2rem; border: 1px solid var(--line); background: var(--slate); }
+    @media (min-width: 900px) { .sig { grid-template-columns: 1.05fr 1fr; } }
+    .sig-body { display: flex; flex-direction: column; gap: 1rem; justify-content: flex-end; padding: 1.5rem 1.4rem 1.6rem; }
+    @media (min-width: 900px) { .sig-body { padding: 2.75rem; } }
+    .sig-name { font-family: var(--f-display); font-weight: 900; text-transform: uppercase; color: var(--latte); font-size: clamp(3.75rem, 17vw, 7rem); line-height: .8; }
+    .sig-price { font-family: var(--f-display); font-weight: 800; font-size: 3rem; line-height: 1; color: var(--ember); }
+    .pick { position: relative; overflow: hidden; display: flex; flex-direction: column; gap: .6rem; padding: 1.4rem 1.25rem 1.3rem; border-radius: 1.25rem 1.25rem 1.25rem .4rem;
+            border: 1px solid var(--line); background: var(--slate); }
+    .pick::after { content: ""; position: absolute; right: -2.75rem; top: -2.75rem; width: 8rem; height: 8rem; border-radius: 50%; pointer-events: none;
+                   border: 1px solid rgba(255,107,53,.28); box-shadow: 0 0 0 14px rgba(255,107,53,.05), 0 0 0 28px rgba(255,107,53,.03); }
+    .pick h3 { font-family: var(--f-display); font-weight: 800; text-transform: uppercase; font-size: 2.1rem; line-height: .95; color: var(--latte); padding-right: 3rem; }
+    .pick p { color: var(--smoke); font-size: .95rem; }
+    .pick .price { margin-top: auto; padding-top: .5rem; font-family: var(--f-display); font-weight: 800; font-size: 2rem; line-height: 1; color: var(--ember); }
+
+    /* ---------- Cosa apprezzano i clienti ---------- */
+    .fb { padding: 1.5rem 0; border-top: 1px solid var(--line-hi); }
+    .fb h3 { font-family: var(--f-display); font-weight: 800; text-transform: uppercase; font-size: 1.5rem; line-height: 1; color: var(--ember); }
+    .fb p { margin-top: .6rem; font-size: 1.3rem; line-height: 1.32; font-weight: 500; color: var(--latte); max-width: 26rem; text-wrap: pretty; }
+    @media (min-width: 768px) { .fb p { font-size: 1.5rem; } }
+
+    /* ---------- Consegna ---------- */
+    .band-ember { background: radial-gradient(80% 60% at 100% 0%, rgba(255,107,53,.17), transparent 60%), var(--ink); border-block: 1px solid var(--line); }
+    .zone { padding: 1.2rem 1.1rem 1.1rem; border-radius: 1.4rem; background: linear-gradient(135deg, var(--wood-hi), var(--wood)); border: 1px solid rgba(255,107,53,.2); }
+    .zone-v { display: block; margin-top: .35rem; font-family: var(--f-display); font-weight: 900; font-size: clamp(3rem, 13vw, 5.5rem); line-height: .85; color: var(--ember); }
+    .heads-up { display: flex; gap: 1rem; padding: 1.25rem; border-radius: 1.25rem; border: 1px dashed var(--line-hi); background: rgba(255,255,255,.025); }
+    .heads-up .ic { margin-top: .2rem; color: var(--ember); }
+    .heads-up p { margin-top: .4rem; color: var(--cream); opacity: .85; max-width: 34rem; }
+
+    /* ---------- Orari ---------- */
+    .now { padding: 1.5rem 1.4rem; border-radius: 1.75rem 1.75rem 1.75rem .5rem; background: linear-gradient(135deg, var(--wood-hi), var(--wood)); border: 1px solid rgba(255,107,53,.22); }
+    .now-big { margin-top: 1.1rem; font-family: var(--f-display); font-weight: 800; text-transform: uppercase; font-size: clamp(2.2rem, 9vw, 3.4rem); line-height: .95; color: var(--latte); }
+    .now-hours { margin-top: 1rem; display: flex; flex-wrap: wrap; align-items: baseline; gap: .35rem .9rem; }
+    .hours { width: 100%; border-collapse: collapse; }
+    .hours th, .hours td { padding: 1rem .25rem; border-bottom: 1px solid var(--line); text-align: left; vertical-align: baseline; }
+    .hours tr:last-child th, .hours tr:last-child td { border-bottom: 0; }
+    .hours th { font-weight: 600; font-size: 1.05rem; color: var(--latte); white-space: nowrap; }
+    .hours td { text-align: right; font-variant-numeric: tabular-nums; color: var(--cream); }
+    .slot { display: block; line-height: 1.5; }
+    @media (min-width: 520px) { .slot { display: inline-block; margin-left: 1.1rem; } }
+    .closed { font-weight: 700; letter-spacing: .12em; text-transform: uppercase; font-size: .8rem; color: var(--off); }
+    .hours tr.is-today { background: linear-gradient(90deg, rgba(255,107,53,.14), transparent 85%); }
+    .hours tr.is-today th { color: var(--ember); }
+    .today-tag { display: inline-block; margin-left: .55rem; padding: .15rem .5rem; border-radius: .4rem; background: var(--ember); color: #1a0b04; font-size: .66rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; vertical-align: .12em; }
+
+    /* ---------- Dove trovarci ---------- */
+    .plate { display: inline-flex; align-items: baseline; gap: .8rem; padding: .8rem 1.2rem; background: var(--latte); color: #141210; border: 3px solid #141210; outline: 3px solid var(--latte); outline-offset: -10px;
+             border-radius: .35rem; font-family: var(--f-display); font-weight: 800; text-transform: uppercase; line-height: 1; transform: rotate(-1.5deg); }
+    .plate small { font-size: 1.15rem; letter-spacing: .14em; }
+    .plate strong { font-weight: 900; font-size: clamp(2.6rem, 13vw, 4.5rem); }
+    address { font-style: normal; }
+
+    /* ---------- CTA finale ---------- */
+    .final { position: relative; isolation: isolate; overflow: hidden; }
+    .final-media { position: absolute; inset: 0; z-index: -3; }
+    .final-veil { z-index: -2; background: linear-gradient(180deg, #0b0b0b 0%, rgba(11,11,11,.55) 35%, rgba(11,11,11,.8) 100%), radial-gradient(90% 70% at 20% 100%, rgba(255,107,53,.35), transparent 65%), rgba(0,0,0,.25); }
+    .mega-tel { display: inline-block; font-family: var(--f-display); font-weight: 900; color: var(--latte); font-size: clamp(3rem, 15vw, 8.5rem); line-height: .85; letter-spacing: -.005em;
+                text-decoration: underline; text-decoration-color: var(--ember); text-decoration-thickness: .06em; text-underline-offset: .12em; transition: color .2s; }
+    @media (hover: hover) { .mega-tel:hover { color: var(--ember); } }
+
+    /* ---------- Footer ---------- */
+    .site-footer { background: var(--ink); border-top: 1px solid var(--line); padding: 3.5rem 0 calc(var(--bar) + env(safe-area-inset-bottom, 0px) + 1.75rem); }
+    @media (min-width: 768px) { .site-footer { padding-bottom: 2rem; } }
+    .site-footer h2 { font-size: .72rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--smoke); margin-bottom: .8rem; }
+    .site-footer dl > div { display: flex; justify-content: space-between; gap: 1rem; padding: .45rem 0; border-bottom: 1px solid var(--line); }
+    .site-footer dt { color: var(--smoke); }
+    .site-footer dd { text-align: right; color: var(--latte); font-variant-numeric: tabular-nums; }
+    .foot-link { display: inline-flex; align-items: center; min-height: 44px; padding: 0 .1rem; font-weight: 600; color: var(--latte); text-decoration: underline; text-decoration-color: rgba(255,255,255,.25); text-underline-offset: .25em; }
+    @media (hover: hover) { .foot-link:hover { text-decoration-color: var(--ember); } }
+
+    /* ---------- FAQ ---------- */
+    .faq { border-top: 1px solid var(--line-hi); }
+    .faq:last-of-type { border-bottom: 1px solid var(--line-hi); }
+    .faq summary { display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-height: 64px; padding: .75rem 0; cursor: pointer; list-style: none;
+                   font-weight: 600; font-size: 1.1rem; line-height: 1.3; color: var(--latte); }
+    .faq summary::-webkit-details-marker { display: none; }
+    .faq summary .ic { color: var(--ember); transition: transform .3s var(--ease); }
+    .faq[open] summary .ic { transform: rotate(45deg); }
+    .faq .faq-a { padding: 0 0 1.4rem; max-width: 38rem; color: var(--smoke); }
+    .faq .faq-a a { color: var(--latte); text-decoration: underline; text-decoration-color: var(--ember); text-underline-offset: .2em; }
+
+    /* ---------- Come si ordina ---------- */
+    .steps { counter-reset: st; }
+    .steps li { counter-increment: st; display: grid; grid-template-columns: 3rem 1fr; gap: 1rem; align-items: baseline; padding: 1.15rem 0; border-top: 1px solid var(--line-hi); }
+    .steps li:last-child { border-bottom: 1px solid var(--line-hi); }
+    .steps li::before { content: counter(st); font-family: var(--f-display); font-weight: 900; font-size: 2.8rem; line-height: .8; color: var(--ember); }
+    .steps strong { display: block; font-weight: 700; font-size: 1.15rem; color: var(--latte); }
+    .steps span { display: block; margin-top: .2rem; color: var(--smoke); }
+
+    /* ---------- Barra CTA mobile e "torna su" ---------- */
+    .callbar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 45; display: flex; gap: .6rem; padding: .5rem .75rem calc(.5rem + env(safe-area-inset-bottom, 0px));
+               background: rgba(11,11,11,.9); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-top: 1px solid var(--line-hi); }
+    .callbar .btn { min-height: 48px; padding: 0 .9rem; font-size: .95rem; }
+    .callbar .btn-primary { flex: 1.5 1 0; }
+    .callbar .btn-ghost { flex: 1 1 0; }
+    @media (min-width: 768px) { .callbar { display: none; } }
+    .to-top { position: fixed; right: .85rem; bottom: calc(var(--bar) + env(safe-area-inset-bottom, 0px) + .75rem); z-index: 44; display: grid; place-items: center; width: 46px; height: 46px; border-radius: 50%;
+              background: rgba(23,23,23,.92); border: 1px solid var(--line-hi); color: var(--latte); backdrop-filter: blur(8px); transition: transform .2s var(--ease), background-color .2s; }
+    .to-top.is-off { opacity: 0; visibility: hidden; transform: translateY(10px); pointer-events: none; }
+    @media (min-width: 768px) { .to-top { bottom: 1.5rem; right: 1.5rem; } }
+    @media (hover: hover) { .to-top:hover { background: var(--ember); color: #1a0b04; transform: translateY(-2px); } }
+
+    /* ---------- AOS: spostamenti più corti e sobri ---------- */
+    [data-aos="fade-up"][data-aos="fade-up"] { transform: translate3d(0, 26px, 0); }
+    [data-aos="fade-right"][data-aos="fade-right"] { transform: translate3d(-26px, 0, 0); }
+
+    /* ---------- Movimento ridotto ---------- */
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; }
+      .rise { opacity: 1; transform: none; animation: none; }
+      .hero-glow { animation: none; }
+      .hero-media > img { transform: none; }
+    }
+  </style>
+  <noscript><style>[data-aos] { opacity: 1 !important; transform: none !important; }</style></noscript>
+
+  <!-- Dati strutturati: solo informazioni fornite -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Restaurant",
+    "name": "Andy Pizza",
+    "description": "Pizzeria con forno a legna, pizza da asporto e a domicilio a Lurago d'Erba.",
+    "servesCuisine": "Pizza",
+    "telephone": "+390314682794",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Via Roma 82",
+      "postalCode": "22040",
+      "addressLocality": "Lurago d'Erba",
+      "addressRegion": "CO",
+      "addressCountry": "IT"
+    },
+    "openingHoursSpecification": [
+      { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"], "opens": "11:00", "closes": "14:00" },
+      { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"], "opens": "17:30", "closes": "22:00" }
+    ]
+  }
+  </script>
+</head>
+<body>
+<a class="skip" href="#main">Vai al contenuto</a>
+
+<!-- Icone (stile Lucide, ISC) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-flame" viewBox="0 0 24 24"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></symbol>
+  <symbol id="i-bag" viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></symbol>
+  <symbol id="i-bike" viewBox="0 0 24 24"><circle cx="18.5" cy="17.5" r="3.5"/><circle cx="5.5" cy="17.5" r="3.5"/><circle cx="15" cy="5" r="1"/><path d="M12 17.5V14l-3-3 4-3 2 3h2"/></symbol>
+  <symbol id="i-list" viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-nav" viewBox="0 0 24 24"><path d="m3 11 19-9-9 19-2-8-8-2z"/></symbol>
+  <symbol id="i-up" viewBox="0 0 24 24"><path d="m18 15-6-6-6 6"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+</svg>
+
+<!-- ================================ HEADER ================================ -->
+<header id="site-header" class="site-header">
+  <div class="wrap flex h-full items-center justify-between gap-4">
+    <a href="#top" class="logo" aria-label="Andy Pizza, torna all'inizio della pagina">
+      <span class="logo-mark" aria-hidden="true"><svg class="ic"><use href="#i-flame"/></svg></span>
+      <span class="logo-text">Andy Pizza</span>
+    </a>
+
+    <nav class="lg-nav" aria-label="Principale">
+      <ul class="flex items-center gap-1">
+        <li><a class="nav-link" href="#menu">Menu</a></li>
+        <li><a class="nav-link" href="#in-evidenza">Specialità</a></li>
+        <li><a class="nav-link" href="#consegna">Consegna</a></li>
+        <li><a class="nav-link" href="#orari">Orari</a></li>
+        <li><a class="nav-link" href="#contatti">Contatti</a></li>
+      </ul>
+    </nav>
+
+    <div class="flex items-center gap-3">
+      <span class="status lg-only" data-open-badge><span class="dot"></span><span data-open-label>Orari</span></span>
+      <a class="btn btn-primary btn-sm md-only" href="tel:0314682794"><svg class="ic" aria-hidden="true"><use href="#i-phone"/></svg>Chiama ora</a>
+      <button type="button" id="burger" class="burger lg-hide" aria-expanded="false" aria-controls="mnav" aria-label="Apri la navigazione">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- Navigazione mobile -->
+<div class="mnav-backdrop" id="mnav-backdrop" aria-hidden="true"></div>
+<nav class="mnav lg-hide" id="mnav" aria-label="Navigazione mobile">
+  <ul>
+    <li><a class="mnav-link" href="#top">Home</a></li>
+    <li><a class="mnav-link" href="#menu">Menu</a></li>
+    <li><a class="mnav-link" href="#in-evidenza">Specialità</a></li>
+    <li><a class="mnav-link" href="#consegna">Consegna</a></li>
+    <li><a class="mnav-link" href="#orari">Orari</a></li>
+    <li><a class="mnav-link" href="#contatti">Contatti</a></li>
+  </ul>
+  <div class="mt-5 flex items-center justify-between gap-3">
+    <span class="status" data-open-badge><span class="dot"></span><span data-open-label>Orari</span></span>
+    <span class="text-sm text-fumo" data-open-detail>Chiuso il martedì</span>
+  </div>
+</nav>
+
+<main id="main">
+
+<!-- ================================= HERO ================================= -->
+<section id="top" class="hero" aria-labelledby="hero-title">
+  <!-- Immagine: vedi IMAGES nello script in fondo (slot "hero") -->
+  <div class="hero-media media" aria-hidden="true"><img data-img="hero" data-widths="800,1400,2000" alt="" decoding="async" fetchpriority="high"></div>
+  <div class="veil hero-veil" aria-hidden="true"></div>
+  <div class="hero-glow" aria-hidden="true"></div>
+
+  <div class="wrap w-full pb-24 pt-28 md:pb-16">
+    <div class="hero-grid">
+      <div class="hg-title">
+        <p class="rise flex flex-wrap gap-2" style="--i:0">
+          <span class="badge"><svg class="ic" aria-hidden="true"><use href="#i-flame"/></svg>Forno a legna</span>
+          <span class="badge badge-line">Lurago d'Erba</span>
+        </p>
+        <h1 id="hero-title" class="hero-title rise" style="--i:1">Andy<br>Pizza</h1>
+        <p class="hero-tag rise" style="--i:2">Cotta a legna. Da ritirare o a casa tua.</p>
+        <p class="hero-p rise" style="--i:3">Sfoglia il menu, scegli la tua pizza, chiama.</p>
+      </div>
+
+      <!-- Indicatore orari: senza JS mostra gli orari fissi, con JS lo stato reale (Europe/Rome) -->
+      <div class="hg-status rise" style="--i:4">
+        <div class="hero-status" data-open-widget>
+          <div class="hs-top">
+            <span class="status" data-open-badge><span class="dot"></span><span data-open-label>Orari</span></span>
+            <span class="hs-detail" data-open-detail>Pranzo e cena</span>
+          </div>
+          <div class="hs-hours">
+            <span class="hs-k" data-today-label>Ogni giorno</span>
+            <span class="hs-v" data-today-hours><span class="nb">11:00–14:00</span> <span class="nb">17:30–22:00</span></span>
+          </div>
+          <p class="hs-note">Chiuso il martedì</p>
+        </div>
+      </div>
+
+      <div class="hg-cta rise" style="--i:5">
+        <div class="flex flex-wrap gap-3">
+          <a class="btn btn-primary btn-lg" style="flex:1.3 1 10rem" href="tel:0314682794"><svg class="ic" aria-hidden="true"><use href="#i-phone"/></svg>Chiama ora</a>
+          <a class="btn btn-ghost btn-lg" style="flex:1 1 10rem" href="#menu">Scopri il menu</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== QUICK INFO ============================== -->
+<section class="quick" aria-label="In breve">
+  <div class="wrap py-5">
+    <ul class="grid grid-cols-2 gap-2.5 md:grid-cols-4 md:gap-4">
+      <li class="chip"><svg class="ic" aria-hidden="true"><use href="#i-flame"/></svg>Forno a legna</li>
+      <li class="chip"><svg class="ic" aria-hidden="true"><use href="#i-bag"/></svg>Asporto</li>
+      <li class="chip"><svg class="ic" aria-hidden="true"><use href="#i-bike"/></svg>Domicilio</li>
+      <li class="chip"><svg class="ic" aria-hidden="true"><use href="#i-pin"/></svg>Lurago d'Erba</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============================ BRAND / CONCEPT ============================ -->
+<section id="concept" class="py-20 md:py-28" aria-labelledby="concept-title">
+  <div class="wrap grid gap-14 lg:grid-cols-12 lg:items-center lg:gap-16">
+    <div class="lg:col-span-6" data-aos="fade-up">
+      <h2 id="concept-title" class="h-sec">Forno a legna, menu chiaro, una telefonata.</h2>
+      <p class="lead mt-6">Andy Pizza è una pizzeria di Lurago d'Erba, in Via Roma 82: pizza da asporto e a domicilio, cotta nel forno a legna. Un menu pensato per chi vuole scegliere senza complicazioni.</p>
+      <p class="mt-4 text-lg font-semibold text-latte">Da Andy, l'accoglienza conta quanto la pizza.</p>
+      <dl class="facts mt-9">
+        <div><dt>Formati</dt><dd>Baby, Normale e Famiglia</dd></div>
+        <div><dt>Impasti</dt><dd>Anche integrale e senza glutine</dd></div>
+        <div><dt>Menu</dt><dd>Otto categorie, tutte in questa pagina</dd></div>
+      </dl>
+    </div>
+
+    <div class="lg:col-span-6" data-aos="fade-right" data-aos-delay="80">
+      <div class="collage">
+        <div class="media frame zoom aspect-[4/5]">
+          <img data-img="concept-a" data-widths="600,900" data-sizes="(min-width:1024px) 40vw, 80vw" alt="Pizza appena sfornata (immagine di repertorio)" loading="lazy" decoding="async">
+        </div>
+        <div class="media collage-small aspect-square">
+          <img data-img="concept-b" data-widths="360,600" data-sizes="(min-width:1024px) 20vw, 40vw" alt="Dettaglio di una pizza farcita (immagine di repertorio)" loading="lazy" decoding="async">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =============================== SERVIZI =============================== -->
+<section id="servizi" class="wood py-20 md:py-28" aria-labelledby="servizi-title">
+  <div class="wrap">
+    <h2 id="servizi-title" class="h-sec max-w-3xl" data-aos="fade-up">Cosa trovi da Andy</h2>
+    <div class="mt-10 grid gap-4 md:grid-cols-3">
+      <article class="svc" data-aos="fade-up">
+        <span class="svc-ic" aria-hidden="true"><svg class="ic"><use href="#i-flame"/></svg></span>
+        <div><h3 class="h-sub">Forno a legna</h3><p>La pizza cotta nel forno a legna.</p></div>
+      </article>
+      <article class="svc" data-aos="fade-up" data-aos-delay="90">
+        <span class="svc-ic" aria-hidden="true"><svg class="ic"><use href="#i-bag"/></svg></span>
+        <div><h3 class="h-sub">Da asporto</h3><p>Scegli dal menu, chiama e passa a ritirare in Via Roma 82.</p></div>
+      </article>
+      <article class="svc" data-aos="fade-up" data-aos-delay="180">
+        <span class="svc-ic" aria-hidden="true"><svg class="ic"><use href="#i-bike"/></svg></span>
+        <div><h3 class="h-sub">Servizio a domicilio</h3><p>A casa tua: €1,50 a Lurago, €2,00 fuori comune.</p></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ================================ MENU ================================ -->
+<section id="menu" aria-labelledby="menu-title" class="pt-20 md:pt-28">
+  <div class="wrap">
+    <div data-aos="fade-up">
+      <h2 id="menu-title" class="h-sec">Il menu</h2>
+      <p class="lead mt-5">Tutto il menu, senza PDF. Salta alla categoria che ti interessa, trova la tua pizza e chiama per ordinare.</p>
+    </div>
+
+    <div class="mt-8 max-w-2xl">
+      <div class="search">
+        <svg class="ic" aria-hidden="true"><use href="#i-search"/></svg>
+        <label for="menu-search" class="sr-only">Cerca una pizza o un ingrediente</label>
+        <input id="menu-search" type="search" placeholder="Cerca una pizza…" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="search">
+        <button type="button" id="menu-search-clear" class="clear" aria-label="Cancella la ricerca" hidden><svg class="ic" aria-hidden="true"><use href="#i-x"/></svg></button>
+      </div>
+      <p id="menu-search-status" class="sr-only" role="status"></p>
+      <a href="#in-evidenza" class="foot-link mt-2">Non sai cosa scegliere? Guarda le specialità di Andy</a>
+    </div>
+
+    <!-- Formati ed extra -->
+    <aside id="personalizza" class="cust" aria-labelledby="cust-title">
+      <h3 id="cust-title" class="h-sub">Personalizza la tua pizza</h3>
+      <div class="mt-5 grid gap-7 md:grid-cols-2 md:gap-12">
+        <div>
+          <p class="label">Formato</p>
+          <ul class="format-list mt-3">
+            <li>Baby</li><li>Normale</li><li>Famiglia</li>
+          </ul>
+          <p class="mt-3 text-sm text-fumo">Scegli il formato quando chiami.</p>
+        </div>
+        <div>
+          <p class="label">Extra</p>
+          <ul class="extras mt-2">
+            <li><span>Pizza integrale</span><data value="1.00">+€1,00</data></li>
+            <li><span>Pizza senza glutine</span><data value="4.00">+€4,00</data></li>
+            <li><span>Mozzarella senza lattosio</span><data value="1.00">+€1,00</data></li>
+          </ul>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- Navigazione per categorie (sticky, scorrevole) -->
+  <nav class="menu-nav mt-10" aria-label="Categorie del menu">
+    <div class="menu-nav-scroller" id="menu-nav-scroller">
+      <a class="menu-pill" href="#tradizionali" data-pill="tradizionali">Tradizionali <small>24</small></a>
+      <a class="menu-pill" href="#specialita" data-pill="specialita">Specialità <small>33</small></a>
+      <a class="menu-pill" href="#pesce" data-pill="pesce">Pesce <small>7</small></a>
+      <a class="menu-pill" href="#calzoni" data-pill="calzoni">Calzoni <small>5</small></a>
+      <a class="menu-pill" href="#focacce" data-pill="focacce">Focacce <small>8</small></a>
+      <a class="menu-pill" href="#panini" data-pill="panini">Panini <small>3</small></a>
+      <a class="menu-pill" href="#fritti" data-pill="fritti">Fritti <small>4</small></a>
+      <a class="menu-pill" href="#bevande" data-pill="bevande">Bevande <small>16</small></a>
+    </div>
+  </nav>
+
+  <div class="wrap pb-20 pt-8 md:pb-28" id="menu-list">
+    <p id="menu-empty" class="mb-6 rounded-2xl border border-white/10 bg-ardesia p-6 text-lg" hidden>
+      Nessuna pizza trovata. Prova con un altro ingrediente, oppure chiama lo <a class="font-bold text-brace underline underline-offset-4" href="tel:0314682794">031.4682794</a>.
+    </p>
+    <div class="grid gap-6 md:gap-8">
+      <section id="tradizionali" class="menu-cat" aria-labelledby="tradizionali-title" data-total="24">
+        <div class="cat-card">
+          <header class="cat-head">
+            <span class="cat-num" aria-hidden="true">01</span>
+            <div>
+              <h3 id="tradizionali-title" class="cat-title">Le Tradizionali</h3>
+              <p class="cat-meta"><b data-count>24</b> pizze<span aria-hidden="true"> · </span>da €5,00 a €8,00</p>
+            </div>
+          </header>
+        <ul class="menu-list cols">
+          <li class="menu-item"><span class="mi-name">Pizza Margherita</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="5.50"><span class="cur">€</span>5,50</data><span class="mi-desc">Pomodoro, mozzarella</span></li>
+          <li class="menu-item"><span class="mi-name">Pizza Marinara</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="5.00"><span class="cur">€</span>5,00</data><span class="mi-desc">Pomodoro, aglio, origano</span></li>
+          <li class="menu-item"><span class="mi-name">Pizza Napoletana</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="6.50"><span class="cur">€</span>6,50</data><span class="mi-desc">Pomodoro, mozzarella, origano, acciughe</span></li>
+          <li class="menu-item"><span class="mi-name">Pizza Romana</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="7.50"><span class="cur">€</span>7,50</data><span class="mi-desc">Pomodoro, mozzarella, origano, acciughe, olive, capperi</span></li>
+          <li class="menu-item"><span class="mi-name">Pizza Wurstel e Patatine</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="7.50"><span class="cur">€</span>7,50</data><span class="mi-desc">Pomodoro, mozzarella, wurstel, patatine</span></li>
+          <li class="menu-item"><span class="mi-name">Pizza Quattro Stagioni</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="8.00"><span class="cur">€</span>8,00</data><span class="mi-desc">Pomodoro, mozzarella, prosciutto cotto, funghi, carciofi, olive</span></li>
+          <li class="menu-item"><span class="mi-name">Pizza al Prosciutto</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="6.50"><span class="cur">€</span>6,50</data><span class="mi-desc">Pomodoro, mozzarella, prosciutto cotto</span></li>
+          <li class="menu-item"><span class="mi-name">Pizza al Prosciutto e Funghi</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="7.50"><span class="cur">€</span>7,50</data><span class="mi-desc">Pomodoro, mozzarella, prosciutto cotto, funghi</span></li>
+          <li class="menu-item"><span class="mi-name">Pizza Capricciosa</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="8.00"><span class="cur">€</span>8,00</data><span class="mi-desc">Pomodoro, mozzarella, prosciutto cotto, funghi, carciofi</span></li>
+          <li class="menu-item"><span class="mi-name">Pizza Occhio di Bue</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="7.50"><span class="cur">€</span>7,50</data><span class="mi-desc">Pomodoro, mozzarella, prosciutto cotto, uova</span></li>
+          <li class="menu-item"><span class="mi-name">Pizza al Tonno</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="7.00"><span class="cur">€</span>7,00</data><span class="mi-desc">Pomodoro, mozzarella, tonno</span></li>
+          <li class="menu-item"><span class="mi-name">Pizza Tonno e Cipolla</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="8.00"><span class="cur">€</span>8,00</data><span class="mi-desc">Pomodoro, mozzarella, tonno, cipolla</span></li>
+          <li class="menu-item"><span class="mi-name">Pizza ai Quattro Formaggi</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="8.00"><span class="cur">€</span>8,00</data><span class="mi-desc">Pomodoro, mozzarella, zola, taleggio, grana</span></li>
+          <li class="menu-item"><span class="mi-name">Pizza Diavola</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="7.00"><span class="cur">€</span>7,00</data><span class="mi-desc">Pomodoro, mozzarella, salame piccante</span></li>
+          <li class="menu-item"><span class="mi-name">Pizza con Salsiccia</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="7.50"><span class="cur">€</span>7,50</data><span class="mi-desc">Pomodoro, mozzarella, salsiccia</span></li>
+          <li class="menu-item"><span class="mi-name">Pizza con Speck e Zola</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="8.00"><span class="cur">€</span>8,00</data><span class="mi-desc">Pomodoro, mozzarella, zola, speck</span></li>
+          <li class="menu-item"><span class="mi-name">Pizza Crudo e Zola</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="8.00"><span class="cur">€</span>8,00</data><span class="mi-desc">Pomodoro, mozzarella, prosciutto crudo di Parma, zola</span></li>
+          <li class="menu-item"><span class="mi-name">Pizza con Olive</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="6.50"><span class="cur">€</span>6,50</data><span class="mi-desc">Pomodoro, mozzarella, olive</span></li>
+          <li class="menu-item"><span class="mi-name">Pizza Ricotta e Spinaci</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="7.50"><span class="cur">€</span>7,50</data><span class="mi-desc">Pomodoro, mozzarella, ricotta, spinaci</span></li>
+          <li class="menu-item"><span class="mi-name">Pizza Vegetariana</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="8.00"><span class="cur">€</span>8,00</data><span class="mi-desc">Pomodoro, mozzarella, peperoni, melanzane, zucchine</span></li>
+          <li class="menu-item"><span class="mi-name">Pizza con Rucola</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="6.50"><span class="cur">€</span>6,50</data><span class="mi-desc">Pomodoro, mozzarella, rucola</span></li>
+          <li class="menu-item"><span class="mi-name">Pizza ai Porcini</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="7.50"><span class="cur">€</span>7,50</data><span class="mi-desc">Pomodoro, mozzarella, funghi porcini</span></li>
+          <li class="menu-item"><span class="mi-name">Pizza al Wuster</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="6.50"><span class="cur">€</span>6,50</data><span class="mi-desc">Pomodoro, mozzarella, wuster</span></li>
+          <li class="menu-item"><span class="mi-name">Pizza Panna e Prosciutto</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="7.50"><span class="cur">€</span>7,50</data><span class="mi-desc">Pomodoro, mozzarella, panna, prosciutto cotto</span></li>
+        </ul>
+        </div>
+      </section>
+
+      <section id="specialita" class="menu-cat" aria-labelledby="specialita-title" data-total="33">
+        <div class="cat-card">
+          <header class="cat-head">
+            <span class="cat-num" aria-hidden="true">02</span>
+            <div>
+              <h3 id="specialita-title" class="cat-title">Le Specialità</h3>
+              <p class="cat-meta"><b data-count>33</b> pizze<span aria-hidden="true"> · </span>da €6,00 a €10,00</p>
+            </div>
+          </header>
+        <ul class="menu-list cols">
+          <li class="menu-item"><span class="mi-name">Pizza Andy</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="9.50"><span class="cur">€</span>9,50</data><span class="mi-desc">Pomodoro, mozzarella, pomodori freschi, basilico, rucola, scaglie di grana</span></li>
+          <!-- VERIFICARE PREZZO: nel menu cartaceo (foto) la Caprese risulta 8,00; qui 6,00 come da dataset del brief -->
+          <li class="menu-item"><span class="mi-name">Pizza Caprese</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="6.00"><span class="cur">€</span>6,00</data><span class="mi-desc">Pomodoro, mozzarella di bufala, pomodorini freschi, basilico</span></li>
+          <li class="menu-item"><span class="mi-name">Pizza Bufalina</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="7.50"><span class="cur">€</span>7,50</data><span class="mi-desc">Pomodoro, mozzarella di bufala</span></li>
+          <li class="menu-item"><span class="mi-name">Pizza Italia</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="7.50"><span class="cur">€</span>7,50</data><span class="mi-desc">Pomodoro fresco, mozzarella, olive verdi</span></li>
+          <li class="menu-item"><span class="mi-name">Pizza Mira</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="8.00"><span class="cur">€</span>8,00</data><span class="mi-desc">Pomodoro, mozzarella, olive, peperoni, funghi</span></li>
+          <li class="menu-item"><span class="mi-name">Pizza Estiva</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="8.00"><span class="cur">€</span>8,00</data><span class="mi-desc">Pomodoro, mozzarella, pomodorino fresco, mozzarella fresca, insalata verde</span></li>
+          <li class="menu-item"><span class="mi-name">Pizza Braccio di Ferro</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="8.50"><span class="cur">€</span>8,50</data><span class="mi-desc">Pomodoro, mozzarella, salame piccante, spinaci, uovo</span></li>
+          <li class="menu-item"><span class="mi-name">Pizza Genovese</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="7.50"><span class="cur">€</span>7,50</data><span class="mi-desc">Pomodoro, mozzarella, pomodorini freschi, pesto</span></li>
+          <li class="menu-item"><span class="mi-name">Pizza Parmigiana</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="8.50"><span class="cur">€</span>8,50</data><span class="mi-desc">Pomodoro, mozzarella, prosciutto cotto, melanzane, grana</span></li>
+          <li class="menu-item"><span class="mi-name">Pizza Valtellina</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="10.00"><span class="cur">€</span>10,00</data><span class="mi-desc">Pomodoro, mozzarella, funghi porcini, bresaola, rucola, scaglie di grana</span></li>
+          <li class="menu-item"><span class="mi-name">Pizza Messicana</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="8.50"><span class="cur">€</span>8,50</data><span class="mi-desc">Pomodoro, mozzarella, salsiccia, pancetta, fagioli</span></li>
+          <li class="menu-item"><span class="mi-name">Pizza Rustica</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="8.50"><span class="cur">€</span>8,50</data><span class="mi-desc">Pomodoro, mozzarella, salame piccante, pancetta, uovo</span></li>
+          <li class="menu-item"><span class="mi-name">Pizza Affumicata</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="8.00"><span class="cur">€</span>8,00</data><span class="mi-desc">Pomodoro, mozzarella, scamorza affumicata, speck</span></li>
+          <li class="menu-item"><span class="mi-name">Pizza Padana</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="9.00"><span class="cur">€</span>9,00</data><span class="mi-desc">Pomodoro, mozzarella, zola, funghi porcini, bresaola</span></li>
+          <li class="menu-item"><span class="mi-name">Pizza Americana</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="8.50"><span class="cur">€</span>8,50</data><span class="mi-desc">Pomodoro, mozzarella, peperoni, salsiccia</span></li>
+          <li class="menu-item"><span class="mi-name">Pizza Primavera</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="8.50"><span class="cur">€</span>8,50</data><span class="mi-desc">Pomodoro, mozzarella, pom. freschi, trevisana, scaglie di grana</span></li>
+          <li class="menu-item"><span class="mi-name">Pizza Calabrese</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="9.50"><span class="cur">€</span>9,50</data><span class="mi-desc">Pomodoro, mozzarella, salame piccante, funghi, prosciutto cotto, olive, acciughe, origano</span></li>
+          <li class="menu-item"><span class="mi-name">Pizza Candida</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="9.00"><span class="cur">€</span>9,00</data><span class="mi-desc">Pomodoro, mozzarella, zucchine grigliate, gamberetti</span></li>
+          <li class="menu-item"><span class="mi-name">Pizza Partenopea</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="9.50"><span class="cur">€</span>9,50</data><span class="mi-desc">Pomodoro, mozzarella, salsiccia e friarielli</span></li>
+          <li class="menu-item"><span class="mi-name">Pizza Turbo</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="9.50"><span class="cur">€</span>9,50</data><span class="mi-desc">Pomodoro, mozzarella, salsiccia, salame piccante, zola, cipolla</span></li>
+          <li class="menu-item"><span class="mi-name">Pizza Maialona</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="9.50"><span class="cur">€</span>9,50</data><span class="mi-desc">Pomodoro, mozzarella, salame dolce, prosciutto cotto, salsiccia, wurstel</span></li>
+          <li class="menu-item"><span class="mi-name">Pizza Lurago</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="8.50"><span class="cur">€</span>8,50</data><span class="mi-desc">Pomodoro, mozzarella, prosciutto cotto, scamorza, zucchine</span></li>
+          <li class="menu-item"><span class="mi-name">Pizza Burrata</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="9.50"><span class="cur">€</span>9,50</data><span class="mi-desc">Pomodoro, mozzarella, burrata, crudo</span></li>
+          <li class="menu-item"><span class="mi-name">Pizza Carbonara</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="8.50"><span class="cur">€</span>8,50</data><span class="mi-desc">Pomodoro, mozzarella, pancetta, uovo, grana</span></li>
+          <li class="menu-item"><span class="mi-name">Pizza Del Pizzaiolo</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="8.00"><span class="cur">€</span>8,00</data><span class="mi-desc">Pomodoro, mozzarella, salame piccante, zola</span></li>
+          <li class="menu-item"><span class="mi-name">Pizza Bomba</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="9.00"><span class="cur">€</span>9,00</data><span class="mi-desc">Pomodoro, mozzarella, salsiccia, peperoni, cipolla</span></li>
+          <li class="menu-item"><span class="mi-name">Pizza Paesana</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="9.00"><span class="cur">€</span>9,00</data><span class="mi-desc">Pomodoro, mozzarella, radicchio, zola, salsiccia</span></li>
+          <li class="menu-item"><span class="mi-name">Pizza Lombarda</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="9.00"><span class="cur">€</span>9,00</data><span class="mi-desc">Pomodoro, mozzarella, salsiccia, porcini</span></li>
+          <li class="menu-item"><span class="mi-name">Pizza Della Casa</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="8.50"><span class="cur">€</span>8,50</data><span class="mi-desc">Pomodoro, mozzarella, tonno, fagioli, salame piccante</span></li>
+          <li class="menu-item"><span class="mi-name">Pizza Remo</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="9.50"><span class="cur">€</span>9,50</data><span class="mi-desc">Pomodoro, mozzarella, tonno, olive, salame piccante, cipolla</span></li>
+          <li class="menu-item"><span class="mi-name">Pizza Delicata</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="10.00"><span class="cur">€</span>10,00</data><span class="mi-desc">Pomodoro, mozzarella, porcini, gamberetti, zucchine</span></li>
+          <li class="menu-item"><span class="mi-name">Pizza Lambrugo</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="10.00"><span class="cur">€</span>10,00</data><span class="mi-desc">Pomodoro, mozzarella di bufala, porcini, speck, grana</span></li>
+          <li class="menu-item"><span class="mi-name">Pizza Fantastica</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="9.50"><span class="cur">€</span>9,50</data><span class="mi-desc">Pomodoro, mozzarella, crudo, pomodorino fresco, rucola, grana</span></li>
+        </ul>
+        </div>
+      </section>
+
+      <section id="pesce" class="menu-cat" aria-labelledby="pesce-title" data-total="7">
+        <div class="cat-card">
+          <header class="cat-head">
+            <span class="cat-num" aria-hidden="true">03</span>
+            <div>
+              <h3 id="pesce-title" class="cat-title">Le Specialità di Pesce</h3>
+              <p class="cat-meta"><b data-count>7</b> pizze<span aria-hidden="true"> · </span>da €7,00 a €10,00</p>
+            </div>
+          </header>
+        <ul class="menu-list cols">
+          <li class="menu-item"><span class="mi-name">Pizza ai Frutti di Mare</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="9.00"><span class="cur">€</span>9,00</data><span class="mi-desc">Pomodoro, mozzarella, frutti di mare</span></li>
+          <li class="menu-item"><span class="mi-name">Pizza al Salmone</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="9.00"><span class="cur">€</span>9,00</data><span class="mi-desc">Pomodoro, mozzarella, salmone</span></li>
+          <li class="menu-item"><span class="mi-name">Pizza ai Gamberetti</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="7.50"><span class="cur">€</span>7,50</data><span class="mi-desc">Pomodoro, mozzarella, gamberetti</span></li>
+          <li class="menu-item"><span class="mi-name">Pizza alla Polpa di Granchio</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="7.00"><span class="cur">€</span>7,00</data><span class="mi-desc">Pomodoro, mozzarella, polpa di granchio</span></li>
+          <li class="menu-item"><span class="mi-name">Pizza Mari e Monti</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="10.00"><span class="cur">€</span>10,00</data><span class="mi-desc">Pomodoro, mozzarella, frutti di mare, funghi porcini</span></li>
+          <li class="menu-item"><span class="mi-name">Pizza Salmone e Gamberetti</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="10.00"><span class="cur">€</span>10,00</data><span class="mi-desc">Pomodoro, mozzarella, salmone, gamberetti</span></li>
+          <li class="menu-item"><span class="mi-name">Pizza Polpa di Granchio e Gamberetti</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="9.00"><span class="cur">€</span>9,00</data><span class="mi-desc">Pomodoro, mozzarella, polpa di granchio, gamberetti</span></li>
+        </ul>
+        </div>
+      </section>
+
+      <section id="calzoni" class="menu-cat" aria-labelledby="calzoni-title" data-total="5">
+        <div class="cat-card">
+          <header class="cat-head">
+            <span class="cat-num" aria-hidden="true">04</span>
+            <div>
+              <h3 id="calzoni-title" class="cat-title">Calzoni</h3>
+              <p class="cat-meta"><b data-count>5</b> calzoni<span aria-hidden="true"> · </span>da €7,00 a €8,00</p>
+            </div>
+          </header>
+        <ul class="menu-list cols">
+          <li class="menu-item"><span class="mi-name">Siciliano</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="8.00"><span class="cur">€</span>8,00</data><span class="mi-desc">Pomodoro, mozzarella, origano, acciughe, capperi, olive</span></li>
+          <li class="menu-item"><span class="mi-name">Liscio</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="7.00"><span class="cur">€</span>7,00</data><span class="mi-desc">Pomodoro, mozzarella, prosciutto cotto</span></li>
+          <li class="menu-item"><span class="mi-name">Farcito</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="8.00"><span class="cur">€</span>8,00</data><span class="mi-desc">Pomodoro, mozzarella, prosciutto cotto, funghi, carciofi</span></li>
+          <li class="menu-item"><span class="mi-name">Vegetariano</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="8.00"><span class="cur">€</span>8,00</data><span class="mi-desc">Pomodoro, mozzarella, peperoni, melanzane, zucchine</span></li>
+          <li class="menu-item"><span class="mi-name">Quattro Formaggi</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="8.00"><span class="cur">€</span>8,00</data><span class="mi-desc">Pomodoro, mozzarella, zola, taleggio, grana</span></li>
+        </ul>
+        </div>
+      </section>
+
+      <section id="focacce" class="menu-cat" aria-labelledby="focacce-title" data-total="8">
+        <div class="cat-card">
+          <header class="cat-head">
+            <span class="cat-num" aria-hidden="true">05</span>
+            <div>
+              <h3 id="focacce-title" class="cat-title">Focacce</h3>
+              <p class="cat-meta"><b data-count>8</b> focacce<span aria-hidden="true"> · </span>da €4,00 a €8,50</p>
+            </div>
+          </header>
+        <ul class="menu-list cols">
+          <li class="menu-item"><span class="mi-name">Pomodorino fresco, rucola, grana</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="6.50"><span class="cur">€</span>6,50</data></li>
+          <li class="menu-item"><span class="mi-name">Quattro formaggi</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="6.50"><span class="cur">€</span>6,50</data></li>
+          <li class="menu-item"><span class="mi-name">Crudo, burrata</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="8.50"><span class="cur">€</span>8,50</data></li>
+          <li class="menu-item"><span class="mi-name">Crudo, pomodorino fresco, grana</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="7.50"><span class="cur">€</span>7,50</data></li>
+          <li class="menu-item"><span class="mi-name">Focaccia, nutella</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="5.00"><span class="cur">€</span>5,00</data></li>
+          <li class="menu-item"><span class="mi-name">Focaccia liscia</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="4.00"><span class="cur">€</span>4,00</data></li>
+          <li class="menu-item"><span class="mi-name">Focaccia bruschetta pomodorino fresco, aglio e origano</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="5.00"><span class="cur">€</span>5,00</data></li>
+          <li class="menu-item"><span class="mi-name">Focaccia crudo, pomodorino fresco, rucola, grana</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="8.00"><span class="cur">€</span>8,00</data></li>
+        </ul>
+        </div>
+      </section>
+
+      <section id="panini" class="menu-cat" aria-labelledby="panini-title" data-total="3">
+        <div class="cat-card">
+          <header class="cat-head">
+            <span class="cat-num" aria-hidden="true">06</span>
+            <div>
+              <h3 id="panini-title" class="cat-title">Panini</h3>
+              <p class="cat-meta"><b data-count>3</b> panini<span aria-hidden="true"> · </span>€8,00</p>
+            </div>
+          </header>
+        <ul class="menu-list">
+          <li class="menu-item"><span class="mi-name">Panino</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="8.00"><span class="cur">€</span>8,00</data><span class="mi-desc">Mozzarella fresca, crudo, rucola, pomodorini, grana</span></li>
+          <li class="menu-item"><span class="mi-name">Panino</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="8.00"><span class="cur">€</span>8,00</data><span class="mi-desc">Mozzarella fresca, tonno, pomodorini, grana, rucola</span></li>
+          <li class="menu-item"><span class="mi-name">Panino</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="8.00"><span class="cur">€</span>8,00</data><span class="mi-desc">Mozzarella fresca, quattro formaggi, prosciutto cotto</span></li>
+        </ul>
+        </div>
+      </section>
+
+      <section id="fritti" class="menu-cat" aria-labelledby="fritti-title" data-total="4">
+        <div class="cat-card">
+          <header class="cat-head">
+            <span class="cat-num" aria-hidden="true">07</span>
+            <div>
+              <h3 id="fritti-title" class="cat-title">I Fritti</h3>
+              <p class="cat-meta"><b data-count>4</b> fritti<span aria-hidden="true"> · </span>da €4,00 a €6,00</p>
+            </div>
+          </header>
+        <ul class="menu-list cols">
+          <li class="menu-item"><span class="mi-name">Patatine Fritte</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="4.50"><span class="cur">€</span>4,50</data></li>
+          <li class="menu-item"><span class="mi-name">Olive Ascolane (7 pz.)</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="4.00"><span class="cur">€</span>4,00</data></li>
+          <li class="menu-item"><span class="mi-name">Cotoletta di pollo</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="6.00"><span class="cur">€</span>6,00</data></li>
+          <li class="menu-item"><span class="mi-name">Tris di verdure pastellate</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="4.50"><span class="cur">€</span>4,50</data></li>
+        </ul>
+        </div>
+      </section>
+
+      <section id="bevande" class="menu-cat" aria-labelledby="bevande-title" data-total="16">
+        <div class="cat-card">
+          <header class="cat-head">
+            <span class="cat-num" aria-hidden="true">08</span>
+            <div>
+              <h3 id="bevande-title" class="cat-title">Bevande</h3>
+              <p class="cat-meta"><b data-count>16</b> bevande<span aria-hidden="true"> · </span>da €1,00 a €7,00</p>
+            </div>
+          </header>
+        <div class="bev-grid">
+        <div class="bev-group">
+          <h4 class="bev-title">Bibite</h4>
+          <ul class="menu-list">
+          <li class="menu-item"><span class="mi-name">Acqua naturale / frizzante</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="1.00"><span class="cur">€</span>1,00</data></li>
+          <li class="menu-item"><span class="mi-name">Coca Cola / zero</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="2.00"><span class="cur">€</span>2,00</data></li>
+          <li class="menu-item"><span class="mi-name">Fanta</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="2.00"><span class="cur">€</span>2,00</data></li>
+          <li class="menu-item"><span class="mi-name">Sprite</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="2.00"><span class="cur">€</span>2,00</data></li>
+          <li class="menu-item"><span class="mi-name">Lemonsoda</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="2.00"><span class="cur">€</span>2,00</data></li>
+          <li class="menu-item"><span class="mi-name">Tè pesca</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="2.00"><span class="cur">€</span>2,00</data></li>
+          <li class="menu-item"><span class="mi-name">Pepsi limone</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="2.00"><span class="cur">€</span>2,00</data></li>
+          <li class="menu-item"><span class="mi-name">Red Bull</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="2.50"><span class="cur">€</span>2,50</data></li>
+          </ul>
+        </div>
+        <div class="bev-group">
+          <h4 class="bev-title">Birre</h4>
+          <ul class="menu-list">
+          <li class="menu-item"><span class="mi-name">Birra lattina cl. 33</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="2.50"><span class="cur">€</span>2,50</data></li>
+          <li class="menu-item"><span class="mi-name">Birra Heineken cl. 33</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="3.00"><span class="cur">€</span>3,00</data></li>
+          <li class="menu-item"><span class="mi-name">Birra Beck&#x27;s cl. 33</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="3.00"><span class="cur">€</span>3,00</data></li>
+          <li class="menu-item"><span class="mi-name">Birra Ceres cl. 33</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="3.50"><span class="cur">€</span>3,50</data></li>
+          <li class="menu-item"><span class="mi-name">Birra Moretti cl. 66</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="3.50"><span class="cur">€</span>3,50</data></li>
+          </ul>
+        </div>
+        <div class="bev-group">
+          <h4 class="bev-title">Vino e Prosecco</h4>
+          <ul class="menu-list">
+          <li class="menu-item"><span class="mi-name">Vino bianco &quot;Pinot grigio&quot;</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="6.00"><span class="cur">€</span>6,00</data></li>
+          <li class="menu-item"><span class="mi-name">Vino rosso &quot;Nero d&#x27;Avola&quot;</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="6.00"><span class="cur">€</span>6,00</data></li>
+          <li class="menu-item"><span class="mi-name">Prosecco</span><span class="mi-leader" aria-hidden="true"></span><data class="mi-price" value="7.00"><span class="cur">€</span>7,00</data></li>
+          </ul>
+        </div>
+      </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ IN EVIDENZA ============================ -->
+<section id="in-evidenza" class="py-20 md:py-28" aria-labelledby="ev-title">
+  <div class="wrap">
+    <div data-aos="fade-up">
+      <h2 id="ev-title" class="h-sec">Le specialità di Andy</h2>
+      <p class="lead mt-5">Una selezione dal menu, per chi non sa da dove iniziare.</p>
+    </div>
+
+    <article class="sig mt-10" data-aos="fade-up">
+      <div class="media aspect-[5/4] md:aspect-auto md:min-h-[28rem]">
+        <img data-img="signature" data-widths="600,900,1200" data-sizes="(min-width:900px) 50vw, 100vw" alt="Pizza appena sfornata (immagine di repertorio)" loading="lazy" decoding="async">
+      </div>
+      <div class="sig-body">
+        <p class="badge self-start"><svg class="ic" aria-hidden="true"><use href="#i-flame"/></svg>La signature di Andy</p>
+        <h3 class="sig-name">Pizza Andy</h3>
+        <p class="max-w-md text-lg text-crema/85">Pomodoro, mozzarella, pomodori freschi, basilico, rucola, scaglie di grana</p>
+        <div class="mt-2 flex flex-wrap items-center gap-x-7 gap-y-4">
+          <data class="sig-price" value="9.50">€9,50</data>
+          <a class="btn btn-primary btn-lg" href="tel:0314682794"><svg class="ic" aria-hidden="true"><use href="#i-phone"/></svg>Chiama e ordinala</a>
+        </div>
+      </div>
+    </article>
+
+    <div class="mt-4 grid gap-4 md:grid-cols-3">
+      <article class="pick" data-aos="fade-up"><h3>Pizza Valtellina</h3><p>Pomodoro, mozzarella, funghi porcini, bresaola, rucola, scaglie di grana</p><data class="price" value="10.00">€10,00</data></article>
+      <article class="pick" data-aos="fade-up" data-aos-delay="90"><h3>Pizza Lambrugo</h3><p>Pomodoro, mozzarella di bufala, porcini, speck, grana</p><data class="price" value="10.00">€10,00</data></article>
+      <article class="pick" data-aos="fade-up" data-aos-delay="180"><h3>Pizza Delicata</h3><p>Pomodoro, mozzarella, porcini, gamberetti, zucchine</p><data class="price" value="10.00">€10,00</data></article>
+    </div>
+    <p class="mt-6"><a class="foot-link" href="#specialita">Vedi tutte le specialità nel menu</a></p>
+  </div>
+</section>
+
+<!-- ============================ COSA APPREZZANO ============================ -->
+<!-- Sintesi editoriale: nessuna recensione, stella o nome inventati.
+     Quando ci sono recensioni reali e autorizzate, aggiungerle qui sotto come blocchi <figure> separati. -->
+<section id="clienti" class="pb-20 md:pb-28" aria-labelledby="clienti-title">
+  <div class="wrap grid gap-10 lg:grid-cols-12 lg:gap-16">
+    <div class="lg:col-span-5" data-aos="fade-up">
+      <h2 id="clienti-title" class="h-sec">Quello che i clienti apprezzano</h2>
+      <p class="lead mt-5">Una sintesi di ciò che si dice di Andy Pizza.</p>
+    </div>
+    <div class="grid gap-x-12 md:grid-cols-2 lg:col-span-7" data-aos="fade-up" data-aos-delay="80">
+      <div class="fb"><h3>L'accoglienza</h3><p>Andy? Gentilissimo, dicono i clienti.</p></div>
+      <div class="fb"><h3>L'impasto</h3><p>Un impasto apprezzato per la sua leggerezza.</p></div>
+      <div class="fb"><h3>Le farciture</h3><p>Ingredienti dati con generosità.</p></div>
+      <div class="fb"><h3>Senza glutine</h3><p>Anche la pizza senza glutine viene apprezzata.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== CONSEGNA ============================== -->
+<section id="consegna" class="band-ember py-20 md:py-28" aria-labelledby="consegna-title">
+  <div class="wrap grid gap-12 lg:grid-cols-12 lg:gap-16">
+    <div class="lg:col-span-5" data-aos="fade-up">
+      <h2 id="consegna-title" class="h-sec">Pizza a casa tua</h2>
+      <p class="lead mt-5">Ordini per telefono e la pizza arriva a domicilio. Il costo del servizio dipende dalla zona.</p>
+      <a class="btn btn-primary btn-lg mt-8" href="tel:0314682794"><svg class="ic" aria-hidden="true"><use href="#i-phone"/></svg>Chiama per ordinare</a>
+    </div>
+    <div class="lg:col-span-7">
+      <div class="grid grid-cols-2 gap-3 sm:gap-4">
+        <div class="zone" data-aos="fade-up"><p class="label">Lurago d'Erba</p><data class="zone-v" value="1.50">€1,50</data></div>
+        <div class="zone" data-aos="fade-up" data-aos-delay="90"><p class="label">Fuori comune</p><data class="zone-v" value="2.00">€2,00</data></div>
+      </div>
+      <div class="heads-up mt-4" data-aos="fade-up">
+        <svg class="ic" aria-hidden="true"><use href="#i-clock"/></svg>
+        <div>
+          <h3 class="h-sub">Nelle serate più piene</h3>
+          <p>Il venerdì e il sabato sera i tempi possono allungarsi. Se hai un orario preciso, prenota con un po' di anticipo: basta una telefonata.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =============================== ORARI =============================== -->
+<section id="orari" class="py-20 md:py-28" aria-labelledby="orari-title">
+  <div class="wrap grid gap-10 lg:grid-cols-12 lg:gap-16">
+    <div class="lg:col-span-5" data-aos="fade-up">
+      <h2 id="orari-title" class="h-sec">Quando siamo aperti</h2>
+      <div class="now mt-8" data-open-widget>
+        <span class="status" data-open-badge><span class="dot"></span><span data-open-label>Orari</span></span>
+        <p class="now-big" data-open-big>Pranzo e cena</p>
+        <p class="now-hours"><span class="hs-detail" data-open-detail>Ogni giorno, tranne il martedì</span></p>
+        <div class="hs-hours">
+          <span class="hs-k" data-today-label>Ogni giorno</span>
+          <span class="hs-v" data-today-hours><span class="nb">11:00–14:00</span> <span class="nb">17:30–22:00</span></span>
+        </div>
+      </div>
+      <a class="btn btn-primary btn-lg mt-6" href="tel:0314682794"><svg class="ic" aria-hidden="true"><use href="#i-phone"/></svg>Chiama ora</a>
+    </div>
+
+    <div class="lg:col-span-7" data-aos="fade-up" data-aos-delay="80">
+      <table class="hours">
+        <caption class="sr-only">Orari di apertura settimanali</caption>
+        <thead class="sr-only"><tr><th scope="col">Giorno</th><th scope="col">Orario</th></tr></thead>
+        <tbody>
+          <tr data-dow="1"><th scope="row">Lunedì</th><td><span class="slot">11:00–14:00</span><span class="slot">17:30–22:00</span></td></tr>
+          <tr data-dow="2"><th scope="row">Martedì</th><td><span class="closed">Chiuso</span></td></tr>
+          <tr data-dow="3"><th scope="row">Mercoledì</th><td><span class="slot">11:00–14:00</span><span class="slot">17:30–22:00</span></td></tr>
+          <tr data-dow="4"><th scope="row">Giovedì</th><td><span class="slot">11:00–14:00</span><span class="slot">17:30–22:00</span></td></tr>
+          <tr data-dow="5"><th scope="row">Venerdì</th><td><span class="slot">11:00–14:00</span><span class="slot">17:30–22:00</span></td></tr>
+          <tr data-dow="6"><th scope="row">Sabato</th><td><span class="slot">11:00–14:00</span><span class="slot">17:30–22:00</span></td></tr>
+          <tr data-dow="0"><th scope="row">Domenica</th><td><span class="slot">11:00–14:00</span><span class="slot">17:30–22:00</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ================================ FAQ ================================ -->
+<section id="faq" class="wood py-20 md:py-28" aria-labelledby="faq-title">
+  <div class="wrap grid gap-10 lg:grid-cols-12 lg:gap-16">
+    <div class="lg:col-span-4" data-aos="fade-up">
+      <h2 id="faq-title" class="h-sec">Domande frequenti</h2>
+      <p class="lead mt-5">Non trovi la risposta? Chiama lo <a class="font-bold text-brace underline underline-offset-4" href="tel:0314682794">031.4682794</a>.</p>
+    </div>
+    <div class="lg:col-span-8" data-aos="fade-up" data-aos-delay="80">
+      <details class="faq">
+        <summary>Come si ordina<svg class="ic" aria-hidden="true"><use href="#i-plus"/></svg></summary>
+        <div class="faq-a"><p>L'ordine si fa per telefono: scegli dal menu qui sopra e chiama lo <a href="tel:0314682794">031.4682794</a>. Puoi indicare formato ed extra direttamente durante la chiamata.</p></div>
+      </details>
+      <details class="faq">
+        <summary>Quando siete aperti<svg class="ic" aria-hidden="true"><use href="#i-plus"/></svg></summary>
+        <div class="faq-a"><p>Tutti i giorni dalle 11:00 alle 14:00 e dalle 17:30 alle 22:00. Il martedì siamo chiusi.</p></div>
+      </details>
+      <details class="faq">
+        <summary>Fate consegne a domicilio<svg class="ic" aria-hidden="true"><use href="#i-plus"/></svg></summary>
+        <div class="faq-a"><p>Sì. Il servizio costa €1,50 a Lurago d'Erba e €2,00 fuori comune.</p></div>
+      </details>
+      <details class="faq">
+        <summary>Quali formati e impasti ci sono<svg class="ic" aria-hidden="true"><use href="#i-plus"/></svg></summary>
+        <div class="faq-a"><p>Le pizze si scelgono nei formati Baby, Normale e Famiglia. Puoi avere l'impasto integrale (+€1,00) o senza glutine (+€4,00); la mozzarella senza lattosio costa +€1,00.</p></div>
+      </details>
+      <details class="faq">
+        <summary>Conviene prenotare<svg class="ic" aria-hidden="true"><use href="#i-plus"/></svg></summary>
+        <div class="faq-a"><p>Il venerdì e il sabato sera sono i momenti più affollati e i tempi possono allungarsi. Se hai un orario preciso, chiama con un po' di anticipo.</p></div>
+      </details>
+      <details class="faq">
+        <summary>Dove si trova la pizzeria<svg class="ic" aria-hidden="true"><use href="#i-plus"/></svg></summary>
+        <div class="faq-a"><p>In Via Roma 82, a Lurago d'Erba (CO). Trovi il link alle indicazioni nella sezione <a href="#contatti">Dove trovarci</a>.</p></div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ============================= DOVE TROVARCI ============================= -->
+<section id="contatti" class="py-20 md:py-28" aria-labelledby="contatti-title">
+  <div class="wrap grid gap-14 lg:grid-cols-12 lg:gap-16">
+    <div class="lg:col-span-6" data-aos="fade-up">
+      <h2 id="contatti-title" class="h-sec">Dove trovarci</h2>
+      <p class="mt-9"><span class="plate"><small>Via Roma</small><strong>82</strong></span></p>
+      <address class="mt-9 text-lg leading-relaxed text-latte"><strong>Andy Pizza</strong><br>Via Roma 82<br>22040 Lurago d'Erba (CO)</address>
+      <p class="mt-3 text-lg"><a class="foot-link" href="tel:0314682794">031.4682794</a></p>
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a class="btn btn-primary btn-lg" style="flex:1 1 11rem" href="tel:0314682794"><svg class="ic" aria-hidden="true"><use href="#i-phone"/></svg>Chiama ora</a>
+        <a class="btn btn-ghost btn-lg" style="flex:1 1 11rem" href="https://www.google.com/maps/search/?api=1&amp;query=Andy+Pizza+Via+Roma+82+Lurago+d%27Erba+CO" target="_blank" rel="noopener"><svg class="ic" aria-hidden="true"><use href="#i-nav"/></svg>Apri in Maps<span class="sr-only"> (si apre in una nuova scheda)</span></a>
+      </div>
+    </div>
+    <div class="lg:col-span-6" data-aos="fade-up" data-aos-delay="80">
+      <h3 class="h-sub">Come si ordina</h3>
+      <ol class="steps mt-5">
+        <li><div><strong>Scegli dal menu</strong><span>Sfoglia le categorie e trova la tua pizza.</span></div></li>
+        <li><div><strong>Chiama lo 031.4682794</strong><span>Indica pizza, formato ed eventuali extra.</span></div></li>
+        <li><div><strong>Ritira o fatti portare la pizza</strong><span>In Via Roma 82, oppure a domicilio.</span></div></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== CTA FINALE ============================== -->
+<section id="chiama" class="final py-24 md:py-36" aria-labelledby="final-title">
+  <div class="final-media media" aria-hidden="true"><img data-img="finale" data-widths="800,1400,2000" alt="" loading="lazy" decoding="async"></div>
+  <div class="veil final-veil" aria-hidden="true"></div>
+  <div class="wrap" data-aos="fade-up">
+    <h2 id="final-title" class="h-sec max-w-3xl">Hai già scelto?</h2>
+    <p class="mt-8"><a class="mega-tel" href="tel:0314682794">031.4682794</a></p>
+    <p class="lead mt-6 !text-crema">Tutti i giorni 11:00–14:00 e 17:30–22:00. Chiuso il martedì.</p>
+    <div class="mt-8 flex flex-wrap gap-3">
+      <a class="btn btn-primary btn-lg" style="flex:1 1 11rem;max-width:16rem" href="tel:0314682794"><svg class="ic" aria-hidden="true"><use href="#i-phone"/></svg>Chiama ora</a>
+      <a class="btn btn-ghost btn-lg" style="flex:1 1 11rem;max-width:16rem" href="#menu">Torna al menu</a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ================================ FOOTER ================================ -->
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="grid gap-10 md:grid-cols-3 md:gap-12">
+      <div>
+        <a href="#top" class="logo" aria-label="Andy Pizza, torna all'inizio della pagina">
+          <span class="logo-mark" aria-hidden="true"><svg class="ic"><use href="#i-flame"/></svg></span>
+          <span class="logo-text">Andy Pizza</span>
+        </a>
+        <address class="mt-5 leading-relaxed text-cream/90">Via Roma 82<br>22040 Lurago d'Erba (CO)</address>
+        <p class="mt-2"><a class="foot-link" href="tel:0314682794">031.4682794</a></p>
+      </div>
+      <div>
+        <h2>Orari</h2>
+        <dl>
+          <div><dt>Tutti i giorni</dt><dd>11:00–14:00 · 17:30–22:00</dd></div>
+          <div><dt>Martedì</dt><dd>Chiuso</dd></div>
+        </dl>
+      </div>
+      <div>
+        <h2>Consegna a domicilio</h2>
+        <dl>
+          <div><dt>Lurago d'Erba</dt><dd>€1,50</dd></div>
+          <div><dt>Fuori comune</dt><dd>€2,00</dd></div>
+        </dl>
+      </div>
+    </div>
+    <div class="mt-10 flex flex-wrap items-center justify-between gap-x-6 gap-y-2 border-t border-white/10 pt-6 text-sm text-fumo">
+      <p>© <span data-year>2026</span> Andy Pizza · Lurago d'Erba</p>
+      <nav aria-label="Link del footer" class="flex flex-wrap gap-x-4">
+        <a class="foot-link" href="#menu">Menu</a>
+        <a class="foot-link" href="#orari">Orari</a>
+        <a class="foot-link" href="#contatti">Contatti</a>
+        <a class="foot-link" href="tel:0314682794">Chiama</a>
+      </nav>
+    </div>
+  </div>
+</footer>
+
+<a class="to-top is-off" id="to-top" href="#top" aria-label="Torna su"><svg class="ic" aria-hidden="true"><use href="#i-up"/></svg></a>
+
+<!-- Barra CTA mobile -->
+<div class="callbar">
+  <a class="btn btn-primary" href="tel:0314682794"><svg class="ic" aria-hidden="true"><use href="#i-phone"/></svg>Chiama ora</a>
+  <a class="btn btn-ghost" href="#menu"><svg class="ic" aria-hidden="true"><use href="#i-list"/></svg>Vedi il menu</a>
+</div>
+
+<!-- AOS (animazioni allo scroll) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+
+<script>
+(() => {
+  'use strict';
+
+  const $  = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+  const root = document.documentElement;
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ======================================================================
+     1. IMMAGINI DI REPERTORIO
+     Ogni slot ha una lista di candidati provati in ordine: se uno non carica
+     si passa al successivo; se falliscono tutti resta lo sfondo texture (.media).
+     Per usare foto proprie: sostituire con percorsi relativi, es. './img/hero.jpg'
+     (i percorsi che non iniziano con "photo-" vengono usati così come sono).
+     ====================================================================== */
+  const IMAGES = {
+    'hero':      ['photo-1513104890138-7c749659a591', 'photo-1565299624946-b28f40a0ae38'],
+    'concept-a': ['photo-1574071318508-1cdbab80d002', 'photo-1604382354936-07c5d9983bd3'],
+    'concept-b': ['photo-1528137871618-79d2761e3fd5', 'photo-1571407970349-bc81e7e96d47'],
+    'signature': ['photo-1565299624946-b28f40a0ae38', 'photo-1513104890138-7c749659a591'],
+    'finale':    ['photo-1595854341625-f33ee10dbf94', 'photo-1590947132387-155cc02f3212']
+  };
+  const isStock = (s) => /^photo-/.test(s);
+  const stockUrl = (id, w) => `https://images.unsplash.com/${id}?auto=format&fit=crop&q=70&w=${w}`;
+
+  function loadImage(img) {
+    const list = IMAGES[img.dataset.img] || [];
+    const widths = (img.dataset.widths || '900').split(',').map(Number);
+    let i = 0;
+    img.addEventListener('load', () => img.classList.add('is-loaded'));
+    const next = () => {
+      if (i >= list.length) { img.classList.add('is-broken'); return; }
+      const src = list[i++];
+      if (isStock(src)) {
+        img.srcset = widths.map((w) => `${stockUrl(src, w)} ${w}w`).join(', ');
+        img.sizes = img.dataset.sizes || '100vw';
+        img.src = stockUrl(src, widths[Math.floor(widths.length / 2)]);
+      } else {
+        img.removeAttribute('srcset');
+        img.src = src;
+      }
+    };
+    img.addEventListener('error', next);
+    next();
+  }
+  $$('img[data-img]').forEach(loadImage);
+
+  /* ======================================================================
+     2. HEADER, NAV MOBILE, SCROLL
+     ====================================================================== */
+  const header   = $('#site-header');
+  const burger   = $('#burger');
+  const mnav     = $('#mnav');
+  const backdrop = $('#mnav-backdrop');
+  const toTop    = $('#to-top');
+  const heroImg  = $('.hero-media > img');
+  const menuNav  = $('.menu-nav');
+  const scroller = $('#menu-nav-scroller');
+
+  let menuOpen = false;
+  let headerHidden = false;
+  let pinned = false;      // durante lo scroll da pill: l'header resta nascosto
+  let pinTimer = 0;
+  let lastY = window.scrollY;
+  let showTop = false;
+
+  function setMenu(open) {
+    menuOpen = open;
+    mnav.classList.toggle('is-open', open);
+    backdrop.classList.toggle('is-open', open);
+    header.classList.toggle('menu-open', open);
+    burger.setAttribute('aria-expanded', String(open));
+    burger.setAttribute('aria-label', open ? 'Chiudi la navigazione' : 'Apri la navigazione');
+    if (open) hideHeader(false);
+  }
+  function hideHeader(hidden) {
+    if (hidden === headerHidden) return;
+    headerHidden = hidden;
+    header.classList.toggle('is-hidden', hidden);
+    root.style.setProperty('--sticky-top', hidden ? '0px' : 'var(--hdr)');
+  }
+
+  burger.addEventListener('click', () => setMenu(!menuOpen));
+  backdrop.addEventListener('click', () => setMenu(false));
+  $$('a', mnav).forEach((a) => a.addEventListener('click', () => setMenu(false)));
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && menuOpen) { setMenu(false); burger.focus(); }
+  });
+  window.addEventListener('resize', () => { if (window.innerWidth >= 1024 && menuOpen) setMenu(false); });
+  header.addEventListener('focusin', () => hideHeader(false));
+
+  /* ---- Categorie menu: pill attiva ---- */
+  const cats = $$('.menu-cat');
+  const pills = new Map($$('[data-pill]').map((p) => [p.dataset.pill, p]));
+  let activeId = null;
+
+  function setActive(id) {
+    if (id === activeId) return;
+    activeId = id;
+    pills.forEach((p, key) => {
+      const on = key === id;
+      p.classList.toggle('is-active', on);
+      if (on) p.setAttribute('aria-current', 'true'); else p.removeAttribute('aria-current');
+    });
+    const p = id && pills.get(id);
+    if (p && scroller) {
+      scroller.scrollTo({ left: p.offsetLeft - (scroller.clientWidth - p.offsetWidth) / 2, behavior: reduced ? 'auto' : 'smooth' });
+    }
+  }
+  function updateActive() {
+    if (!menuNav) return;
+    const navBottom = menuNav.getBoundingClientRect().bottom;
+    const line = navBottom + 24;
+    let cur = null;
+    for (const c of cats) {
+      if (c.hidden) continue;
+      const r = c.getBoundingClientRect();
+      if (r.top <= line) cur = { id: c.id, bottom: r.bottom };
+    }
+    setActive(cur && cur.bottom > navBottom ? cur.id : null);
+  }
+
+  pills.forEach((a) => a.addEventListener('click', (e) => {
+    const t = document.getElementById(a.dataset.pill);
+    if (!t) return;
+    e.preventDefault();
+    hideHeader(true);
+    pinned = true;
+    clearTimeout(pinTimer);
+    pinTimer = setTimeout(() => { pinned = false; }, 500);
+    const y = t.getBoundingClientRect().top + window.scrollY - menuNav.offsetHeight - 14;
+    window.scrollTo({ top: y, behavior: reduced ? 'auto' : 'smooth' });
+    history.replaceState(null, '', '#' + t.id);
+  }));
+
+  let ticking = false;
+  function onScroll() {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => {
+      ticking = false;
+      const y = Math.max(window.scrollY, 0);
+      header.classList.toggle('is-solid', y > 24);
+
+      const dy = y - lastY;
+      if (pinned) {                       // finché lo scroll continua, il blocco si rinnova
+        clearTimeout(pinTimer);
+        pinTimer = setTimeout(() => { pinned = false; }, 200);
+      } else if (!menuOpen) {
+        if (y > 240 && dy > 6) hideHeader(true);
+        else if (dy < -6 || y <= 240) hideHeader(false);
+      }
+      lastY = y;
+
+      if (y < 900) showTop = false; else if (dy < -6) showTop = true; else if (dy > 6) showTop = false;
+      toTop.classList.toggle('is-off', !showTop);
+      if (heroImg && !reduced && y < window.innerHeight * 1.2) {
+        heroImg.style.transform = `translate3d(0, ${(y * 0.14).toFixed(1)}px, 0) scale(1.12)`;
+      }
+      updateActive();
+    });
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
+  onScroll();
+
+  /* ======================================================================
+     3. RICERCA NEL MENU
+     ====================================================================== */
+  const input    = $('#menu-search');
+  const clearBtn = $('#menu-search-clear');
+  const emptyMsg = $('#menu-empty');
+  const srStatus = $('#menu-search-status');
+  const norm = (s) => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+
+  const items = $$('.menu-item').map((li) => ({
+    li,
+    cat: li.closest('.menu-cat'),
+    text: norm(($('.mi-name', li) || {}).textContent + ' ' + (($('.mi-desc', li) || {}).textContent || ''))
+  }));
+
+  function filterMenu() {
+    const tokens = norm(input.value.trim()).split(/\s+/).filter(Boolean);
+    const perCat = new Map();
+    let total = 0;
+    items.forEach((it) => {
+      const ok = tokens.every((t) => it.text.includes(t));
+      it.li.hidden = !ok;
+      if (ok) { total++; perCat.set(it.cat, (perCat.get(it.cat) || 0) + 1); }
+    });
+    cats.forEach((c) => {
+      const n = perCat.get(c) || 0;
+      const all = Number(c.dataset.total);
+      c.hidden = n === 0;
+      const b = $('[data-count]', c);
+      if (b) b.textContent = tokens.length ? `${n}/${all}` : String(all);
+      const p = pills.get(c.id);
+      if (p) p.hidden = n === 0;
+    });
+    $$('.bev-group').forEach((g) => { g.hidden = !$$('.menu-item:not([hidden])', g).length; });
+    emptyMsg.hidden = !(tokens.length && total === 0);
+    clearBtn.hidden = !input.value;
+    srStatus.textContent = tokens.length ? (total ? `${total} risultati` : 'Nessun risultato') : '';
+    activeId = null;
+    onScroll();
+  }
+  input.addEventListener('input', filterMenu);
+  input.addEventListener('keydown', (e) => { if (e.key === 'Escape' && input.value) { input.value = ''; filterMenu(); } });
+  clearBtn.addEventListener('click', () => { input.value = ''; filterMenu(); input.focus(); });
+
+  /* ======================================================================
+     4. ORARI: stato aperto/chiuso in tempo reale (fuso Europe/Rome)
+     ====================================================================== */
+  const LUNCH = [660, 840];      // 11:00–14:00
+  const DINNER = [1050, 1320];   // 17:30–22:00
+  const SLOTS = { 0: [LUNCH, DINNER], 1: [LUNCH, DINNER], 2: [], 3: [LUNCH, DINNER], 4: [LUNCH, DINNER], 5: [LUNCH, DINNER], 6: [LUNCH, DINNER] };
+  const DAYS = ['domenica', 'lunedì', 'martedì', 'mercoledì', 'giovedì', 'venerdì', 'sabato'];
+  const WD = { Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6 };
+  const hhmm = (m) => String(Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0');
+
+  function romeNow() {
+    const parts = new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/Rome', weekday: 'short', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).formatToParts(new Date());
+    const get = (t) => parts.find((p) => p.type === t).value;
+    return { dow: WD[get('weekday')], min: Number(get('hour')) * 60 + Number(get('minute')) };
+  }
+
+  function openState(dow, min) {
+    const today = SLOTS[dow];
+    const cur = today.find(([a, b]) => min >= a && min < b);
+    if (cur) return { open: true, detail: 'Fino alle ' + hhmm(cur[1]) };
+    const later = today.find(([a]) => min < a);
+    if (later) return { open: false, detail: (later === today[0] ? 'Apre alle ' : 'Riapre alle ') + hhmm(later[0]) };
+    for (let d = 1; d <= 7; d++) {
+      const nd = (dow + d) % 7;
+      if (SLOTS[nd].length) return { open: false, detail: 'Riapre ' + (d === 1 ? 'domani' : DAYS[nd]) + ' alle ' + hhmm(SLOTS[nd][0][0]) };
+    }
+    return { open: false, detail: '' };
+  }
+
+  function updateHours() {
+    let now;
+    try { now = romeNow(); } catch (e) { return; }   // senza Intl restano gli orari fissi in HTML
+    const st = openState(now.dow, now.min);
+    $$('[data-open-badge]').forEach((b) => {
+      b.classList.toggle('is-open', st.open);
+      b.classList.toggle('is-closed', !st.open);
+      const l = $('[data-open-label]', b);
+      if (l) l.textContent = st.open ? 'Aperto' : 'Chiuso';
+    });
+    $$('[data-open-big]').forEach((el) => { el.textContent = st.open ? 'Aperto ora' : 'Chiuso ora'; });
+    $$('[data-open-detail]').forEach((el) => { el.textContent = st.detail; });
+    const slots = SLOTS[now.dow];
+    $$('[data-today-label]').forEach((el) => { el.textContent = 'Oggi'; });
+    $$('[data-today-hours]').forEach((el) => {
+      el.textContent = '';
+      if (!slots.length) { el.textContent = 'Chiuso'; return; }
+      slots.forEach(([a, b], i) => {
+        const s = document.createElement('span'); s.className = 'nb'; s.textContent = hhmm(a) + '–' + hhmm(b); el.append(s);
+      });
+    });
+    $$('.hours tr[data-dow]').forEach((tr) => {
+      const isToday = Number(tr.dataset.dow) === now.dow;
+      tr.classList.toggle('is-today', isToday);
+      const th = $('th', tr);
+      const tag = $('.today-tag', th);
+      if (isToday && !tag) { const s = document.createElement('span'); s.className = 'today-tag'; s.textContent = 'Oggi'; th.appendChild(s); }
+      if (!isToday && tag) tag.remove();
+    });
+  }
+  updateHours();
+  setInterval(updateHours, 30000);
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) updateHours(); });
+
+  /* ======================================================================
+     5. ANIMAZIONI (AOS) e dettagli
+     ====================================================================== */
+  if (window.AOS && !reduced) {
+    AOS.init({ duration: 650, easing: 'ease-out-cubic', once: true, offset: 60 });
+  } else {
+    // AOS non caricato o movimento ridotto: contenuti sempre visibili
+    $$('[data-aos]').forEach((el) => el.removeAttribute('data-aos'));
+  }
+  $$('[data-year]').forEach((el) => { el.textContent = String(new Date().getFullYear()); });
+})();
+</script>
+</body>
+</html>
